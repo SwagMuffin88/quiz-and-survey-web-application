@@ -6,7 +6,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
-@Entity @Data @NoArgsConstructor @RequiredArgsConstructor
+@Entity @Data @NoArgsConstructor
 @Table(name = "questions")
 public class Question {
 
