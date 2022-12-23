@@ -5,7 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
-@Entity @Data @NoArgsConstructor @RequiredArgsConstructor
+@Entity @Data @NoArgsConstructor
 @Table(name="answers")
 public class Answer {
 
