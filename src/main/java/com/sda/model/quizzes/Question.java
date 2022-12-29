@@ -18,13 +18,15 @@ public class Question {
 
     private String correctAnswer;
 
-    @OneToMany(targetEntity = Answer.class, mappedBy = "question",
-        fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//    @OneToMany(targetEntity = Answer.class, mappedBy = "question",
+//        fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(orphanRemoval = true)
+    @JoinColumn(name="question_id")
     private List<Answer> answers;
 
-    @ManyToOne()
-    @JoinColumn(name = "quiz_id")
-    private Quiz quiz;
+//    @ManyToOne()
+//    @JoinColumn(name = "quiz_id")
+//    private Quiz quiz;
 
     public Question(String questionStatement
 //            , List<Answer> answers
