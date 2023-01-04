@@ -1,7 +1,5 @@
 package com.sda.controllers;
 
-
-
 import com.sda.Repositories.AnswerRepository;
 import com.sda.Repositories.AuthorRepository;
 import com.sda.Repositories.QuestionRepository;
@@ -20,7 +18,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/quiz")
+@RequestMapping("/create-quiz")
 public class QuizController {
     @Autowired
     QuizRepository quizRepository;
