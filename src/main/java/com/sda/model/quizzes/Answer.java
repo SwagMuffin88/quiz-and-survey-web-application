@@ -3,21 +3,24 @@ package com.sda.model.quizzes;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 
 @Entity @Data @NoArgsConstructor
 @Table(name="answers")
 public class Answer {
-    // a change
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private int answerId;
 
-    @NotBlank(message = "Please write an answer")
-    private String statement;
+//    @NotBlank(message = "Please write an answer")
+    private String answerStatement;
 
-    public Answer(String statement) {
-        this.statement = statement;
+//    @ManyToOne()
+//    @JoinColumn(name = "question_id")
+//    private Question question;
+
+    public Answer(String answerStatement) {
+        super();
+        this.answerStatement = answerStatement;
     }
 }

@@ -3,7 +3,6 @@ package com.sda.model.quizzes;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Entity @Data @NoArgsConstructor
@@ -12,16 +11,28 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private int questionId;
 
-    @NotBlank(message = "Please write a question")
-    private String statement;
+//    @NotBlank(message = "Please write a question")
+    private String questionStatement;
 
-    @OneToMany
+    private String correctAnswer;
+
+//    @OneToMany(targetEntity = Answer.class, mappedBy = "question",
+//        fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(orphanRemoval = true)
+    @JoinColumn(name="question_id")
     private List<Answer> answers;
 
-    public Question(String statement, List<Answer> answers) {
-        this.statement = statement;
-        this.answers = answers;
+//    @ManyToOne()
+//    @JoinColumn(name = "quiz_id")
+//    private Quiz quiz;
+
+    public Question(String questionStatement
+//            , List<Answer> answers
+            , String correctAnswer) {
+        this.questionStatement = questionStatement;
+//        this.answers = answers;
+        this.correctAnswer = correctAnswer;
     }
 }
