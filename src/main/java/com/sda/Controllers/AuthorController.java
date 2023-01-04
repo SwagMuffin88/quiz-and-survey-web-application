@@ -1,4 +1,4 @@
-package com.sda.controllers;
+package com.sda.Controllers;
 
 import com.sda.Repositories.AuthorRepository;
 import com.sda.model.users.Author;
