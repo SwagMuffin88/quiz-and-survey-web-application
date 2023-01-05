@@ -3,21 +3,27 @@ package com.sda.model.users;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sda.model.quizzes.Quiz;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
+
+import static org.aspectj.weaver.tools.cache.SimpleCacheFactory.enabled;
 
 @Entity @Data @NoArgsConstructor
 @Table(name="authors")
-public class Author {
+public class Author implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-//    @Setter(AccessLevel.PROTECTED)
+//    @Setter(AccessLevel.PROTECTED)  <- Might use later, needs more research
     @Column(name = "author_id")
     private int id;
 
@@ -53,5 +59,28 @@ public class Author {
         this.email = email;
         this.DOB = DOB;
     }
-    public void addQuiz2QuizList(Quiz quiz){ quizzes.add(quiz); }
+    public void addQuiz2QuizList(Quiz quiz) {
+        quizzes.add(quiz);
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+    @Override
+    public boolean isEnabled() {
+        return enabled; // <- correct static import?
+    }
 }

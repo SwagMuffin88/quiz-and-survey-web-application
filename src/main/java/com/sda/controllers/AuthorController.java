@@ -1,7 +1,5 @@
 package com.sda.controllers;
 
-
-
 import com.sda.Repositories.AuthorRepository;
 import com.sda.model.users.Author;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +18,21 @@ import java.util.Optional;
 @CrossOrigin
 @RequestMapping("/user")
 public class AuthorController {
-
     @Autowired
     AuthorRepository authorRepository;
+
+//    @Autowired
+//    public AuthorController(AuthorRepository authorRepository) {
+//        this.authorRepository = authorRepository;
+//    }
+
+
+
+    @GetMapping("/hello")
+    @ResponseBody
+    public String greet() {
+        return "Welcome user";
+    }
 
     @PostMapping("/create")
     public ResponseEntity<Author> createUser (@Valid @RequestBody Author author){
@@ -30,7 +40,6 @@ public class AuthorController {
         authorRepository.save(newAuthor);
         return new ResponseEntity<Author>(newAuthor, HttpStatus.CREATED);
     }
-
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Author> updateUser (@PathVariable int id , @RequestBody Author author){
