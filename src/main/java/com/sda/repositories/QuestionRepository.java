@@ -1,4 +1,4 @@
-package com.sda.Repositories;
+package com.sda.repositories;
 
 
 import com.sda.model.quizzes.Question;

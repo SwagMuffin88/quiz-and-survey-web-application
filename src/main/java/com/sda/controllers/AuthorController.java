@@ -1,7 +1,11 @@
 package com.sda.controllers;
 
-import com.sda.Repositories.AuthorRepository;
+import com.sda.model.quizzes.Question;
+import com.sda.model.quizzes.Quiz;
 import com.sda.model.users.Author;
+import com.sda.repositories.AuthorRepository;
+import com.sda.repositories.QuizRepository;
+import com.sda.services.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,43 +20,38 @@ import java.util.Optional;
 @RequestMapping("/user")
 public class AuthorController {
     @Autowired
-    AuthorRepository authorRepository;
+    AuthorService authorService;
+    @Autowired
+    private QuizRepository quizRepository;
 
-//    @Autowired
-//    public AuthorController(AuthorRepository authorRepository) {
-//        this.authorRepository = authorRepository;
-//    }
-
+    //** Not for API ***
     @GetMapping("/hello")
     @ResponseBody
     public String greet() {
         return "Welcome user";
     }
+    // **************** //
 
     @PostMapping("/create")
     public ResponseEntity<Author> createUser (@Valid @RequestBody Author author){
-        author.setActive(true);
-        authorRepository.save(author);
+        authorService.saveNewAuthor(author);
         return new ResponseEntity<Author>(author, HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Author> updateUser (@PathVariable Long id , @RequestBody Author author){
-        Optional<Author> authorToUpdate = authorRepository.findById(id);
-
-        if(authorToUpdate.isEmpty()){
-            return new ResponseEntity<Author>(author, HttpStatus.NOT_FOUND);
-        }else {
-            authorRepository.save(author);
-            return new ResponseEntity<Author>(author, HttpStatus.OK);
-        }
+        return authorService.updateAuthor(id, author);
     }
 
-    @GetMapping
+//    @PutMapping("/save-quiz")
+//    public ResponseEntity<Author> saveAuthorQuiz (@RequestBody Author author, @RequestBody Quiz quiz) {
+//        quizRepository.addQuizToAuthor(author.getUsername(), quiz.getQuizTitle());
+//        return new ResponseEntity<Author>(author, HttpStatus.OK);
+//    }
+
+    // For endpoint testing:
+    @GetMapping("/view-users")
     public ResponseEntity<List<Author>> getAuthors(){
-        List<Author> authors = authorRepository.findAll();
-        return new ResponseEntity<List<Author>>(authors,HttpStatus.OK);
+        return ResponseEntity.ok().body(authorService.getAuthors());
     }
-
-
 }
