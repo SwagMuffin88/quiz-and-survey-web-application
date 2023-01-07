@@ -45,8 +45,6 @@ public class Author implements UserDetails {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dateOfBirth;
 
-//    @OneToMany(targetEntity = Quiz.class, mappedBy = "author", fetch = FetchType.EAGER,
-//        cascade = CascadeType.ALL)
     @OneToMany
     List<Quiz> quizzes;
 

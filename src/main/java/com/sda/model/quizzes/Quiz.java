@@ -7,7 +7,6 @@ import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Entity @Data @NoArgsConstructor
-@Table(name="quizzes")
 public class Quiz {
 
     @Id

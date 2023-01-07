@@ -6,7 +6,6 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity @Data @NoArgsConstructor
-@Table(name = "questions")
 public class Question {
 
     @Id
@@ -22,21 +21,10 @@ public class Question {
     @JoinColumn(name="question_id")
     private List<Answer> answers;
 
-    // **********
-    // Initial relationship, commented out for now due to data saving issues
-//    @OneToMany(targetEntity = Answer.class, mappedBy = "question",
-//        fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 
-    //    @ManyToOne()
-//    @JoinColumn(name = "quiz_id")
-//    private Quiz quiz;
-    // **********
-
-    public Question(String questionStatement, String correctAnswer
-//            , List<Answer> answers
-            ) {
+    public Question(String questionStatement, String correctAnswer, List<Answer> answers) {
         this.questionStatement = questionStatement;
-//        this.answers = answers;
+        this.answers = answers;
         this.correctAnswer = correctAnswer;
     }
 }

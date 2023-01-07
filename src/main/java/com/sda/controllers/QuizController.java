@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/create-quiz")
+@RequestMapping("/quiz")
 public class QuizController {
     @Autowired
     AuthorService authorService;
@@ -19,32 +19,27 @@ public class QuizController {
     QuizService quizService;
 
     @PostMapping("/create/{userId}")
-    public ResponseEntity<Quiz> createQuizAndAddToUser(@PathVariable Long userId,
-                                                       @RequestBody Quiz quiz) {
-        quizService.createQuiz(quiz);
+    public ResponseEntity<Quiz> createQuizAndAddToUser(@PathVariable Long userId, @RequestBody Quiz quiz) {
 
-        Author author = authorService.findAuthor(userId).
-                orElseThrow(()-> new RuntimeException("The user with the ID "+ userId +" not found "));
-
+        //check if there is user with the provided ID first
+        Author author = authorService.findAuthorById(userId);
+        // Create quiz entity
+        Quiz newQuiz = quizService.createQuiz(quiz);
+        //Save the quiz entity
+        quizService.saveQuiz(newQuiz);
+        //add quiz to the quizzes list of the user
         quizService.addQuizToAuthor(author.getUsername(), quiz.getQuizTitle());
+        // and save the changes in the DB
         authorService.updateAuthor(userId, author); // <- might be redundant
         return new ResponseEntity<Quiz>(quiz, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteQuizById (@PathVariable int id ){
-        quizService.deleteQuiz(id);
-        return new ResponseEntity<String>(" the quiz with the ID "+id+" is removed",
-                HttpStatus.NO_CONTENT);
-    }
-
-    // Might need a different method (not removing from database)
-//    @DeleteMapping("/deleteAll")
-//    public ResponseEntity<String> deleteAll (){
-//        quizRepository.deleteAll();
-//        questionRepository.deleteAll();
-//        answerRepository.deleteAll();
-//        return new ResponseEntity<String>(" data base clean", HttpStatus.NO_CONTENT);
+//    @DeleteMapping("/delete/{id}")
+//    public ResponseEntity<String> deleteQuizById (@PathVariable int id ){
+//        quizService.deleteQuiz(id);
+//        return new ResponseEntity<String>(" the quiz with the ID "+id+" is removed",
+//                HttpStatus.NO_CONTENT);
 //    }
+
 
 }
