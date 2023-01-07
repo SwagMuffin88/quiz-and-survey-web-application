@@ -1,6 +1,7 @@
 package com.sda.controllers;
 
 import com.sda.Repositories.AuthorRepository;
+import com.sda.exceptions.ResourceNotFoundException;
 import com.sda.model.users.Author;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,11 +41,11 @@ public class AuthorController {
     public ResponseEntity<Author> updateUser (@PathVariable Long id , @RequestBody Author author){
         Optional<Author> authorToUpdate = authorRepository.findById(id);
 
-        if(authorToUpdate.isEmpty()){
-            return new ResponseEntity<Author>(author, HttpStatus.NOT_FOUND);
-        }else {
+        if(authorToUpdate.isPresent()){
             authorRepository.save(author);
             return new ResponseEntity<Author>(author, HttpStatus.OK);
+        }else {
+            throw new ResourceNotFoundException("The id "+id+" does not exsist ");
         }
     }
 
