@@ -3,7 +3,7 @@ package com.sda.controllers;
 
 import com.sda.model.quizzes.Question;
 import com.sda.model.quizzes.Quiz;
-import com.sda.Repositories.AuthorRepository;
+import com.sda.repositories.AuthorRepository;
 import com.sda.exceptions.ResourceNotFoundException;
 
 import com.sda.model.users.Author;
