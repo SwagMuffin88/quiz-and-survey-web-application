@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.Collection;
@@ -22,13 +23,19 @@ public class Author implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
 //    @Setter(AccessLevel.PROTECTED)  <- Might use later, needs more research
     private Long id;
+    @NotBlank(message = "Firstname cannot be empty!")
+    @Pattern(regexp = ("\\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+"),message = "The name can not have numbers")
     private String firstName;
+    @NotBlank(message = "Lastname cannot be empty!")
+    @Pattern(regexp = ("\\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+"),message = "The name can not have numbers")
     private String lastName;
 
     @NotBlank(message = "Username cannot be empty!")
+    @Column(unique = true)
     private String username;
     @Size(min=5 , message = "The password can not be smaller than 5")
     @NotBlank(message = "Password cannot be empty!")
+
     private String password;
 
     @Email(message = "Invalid email")

@@ -1,7 +1,11 @@
 package com.sda.controllers;
 
+
 import com.sda.model.quizzes.Question;
 import com.sda.model.quizzes.Quiz;
+import com.sda.Repositories.AuthorRepository;
+import com.sda.exceptions.ResourceNotFoundException;
+
 import com.sda.model.users.Author;
 import com.sda.repositories.AuthorRepository;
 import com.sda.repositories.QuizRepository;
@@ -40,7 +44,18 @@ public class AuthorController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Author> updateUser (@PathVariable Long id , @RequestBody Author author){
+
         return authorService.updateAuthor(id, author);
+
+        //Optional<Author> authorToUpdate = authorRepository.findById(id);
+
+       // if(authorToUpdate.isPresent()){
+       //     authorRepository.save(author);
+       //     return new ResponseEntity<Author>(author, HttpStatus.OK);
+       // }else {
+       //     throw new ResourceNotFoundException("The id "+id+" does not exsist ");
+        //}
+
     }
 
 //    @PutMapping("/save-quiz")
