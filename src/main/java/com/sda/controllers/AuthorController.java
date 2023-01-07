@@ -23,8 +23,6 @@ public class AuthorController {
 //        this.authorRepository = authorRepository;
 //    }
 
-
-
     @GetMapping("/hello")
     @ResponseBody
     public String greet() {
@@ -32,28 +30,29 @@ public class AuthorController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<Author> createUser ( @RequestBody Author author){
-        Author newAuthor = new Author(author.getFirstName(),author.getLastName(), author.getUsername(),author.getPassword(),author.getEmail(),author.getDOB());
-        authorRepository.save(newAuthor);
-        return new ResponseEntity<Author>(newAuthor, HttpStatus.CREATED);
+    public ResponseEntity<Author> createUser (@Valid @RequestBody Author author){
+        author.setActive(true);
+        authorRepository.save(author);
+        return new ResponseEntity<Author>(author, HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Author> updateUser (@PathVariable int id , @RequestBody Author author){
+    public ResponseEntity<Author> updateUser (@PathVariable Long id , @RequestBody Author author){
         Optional<Author> authorToUpdate = authorRepository.findById(id);
-        if(authorToUpdate.isPresent()){
-            author.setId(id);
+
+        if(authorToUpdate.isEmpty()){
+            return new ResponseEntity<Author>(author, HttpStatus.NOT_FOUND);
+        }else {
             authorRepository.save(author);
             return new ResponseEntity<Author>(author, HttpStatus.OK);
-        }else {
-            return new ResponseEntity<Author>(author, HttpStatus.NOT_FOUND);
         }
-
     }
 
-    @GetMapping("/getAllUsers")
+    @GetMapping
     public ResponseEntity<List<Author>> getAuthors(){
         List<Author> authors = authorRepository.findAll();
         return new ResponseEntity<List<Author>>(authors,HttpStatus.OK);
     }
+
+
 }

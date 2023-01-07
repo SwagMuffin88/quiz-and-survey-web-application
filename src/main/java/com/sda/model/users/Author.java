@@ -18,20 +18,15 @@ import java.util.List;
 import static org.aspectj.weaver.tools.cache.SimpleCacheFactory.enabled;
 
 @Entity @Data @NoArgsConstructor
-@Table(name="authors")
 public class Author implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 //    @Setter(AccessLevel.PROTECTED)  <- Might use later, needs more research
-    @Column(name = "author_id")
-    private int id;
-
-    @Column(name = "first_name")
+    private Long id;
     private String firstName;
-
-    @Column(name = "last_name")
     private String lastName;
+
     @NotBlank(message = "Username cannot be empty!")
     private String username;
     @Size(min=5 , message = "The password can not be smaller than 5")
@@ -41,24 +36,19 @@ public class Author implements UserDetails {
     @Email(message = "Invalid email")
     @NotBlank(message = "Email cannot be empty!")
     private String email;
+
     @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate DOB;
+    private LocalDate dateOfBirth;
 
 //    @OneToMany(targetEntity = Quiz.class, mappedBy = "author", fetch = FetchType.EAGER,
 //        cascade = CascadeType.ALL)
-    @OneToMany(orphanRemoval = true)
-    @JoinColumn(name="author_id")
+    @OneToMany
     List<Quiz> quizzes;
 
-    public Author(String firstName, String lastName, String username, String password, String email,
-                  LocalDate DOB ) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.DOB = DOB;
-    }
+    private boolean isActive;
+
+
+    //To DO: Move this to service
     public void addQuiz2QuizList(Quiz quiz) {
         quizzes.add(quiz);
     }

@@ -5,7 +5,6 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity @Data @NoArgsConstructor
-@Table(name="answers")
 public class Answer {
 
     @Id
@@ -16,7 +15,6 @@ public class Answer {
     private String answerStatement;
 
     public Answer(String answerStatement) {
-        super();
         this.answerStatement = answerStatement;
     }
 

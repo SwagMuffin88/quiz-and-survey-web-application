@@ -26,7 +26,9 @@ public class SecurityConfig {
 //    Initial config (no security):
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception {
-        http.authorizeRequests()
+        http.csrf()
+                .disable()
+                .authorizeRequests()
                 .anyRequest()
                 .permitAll()
                 .and()

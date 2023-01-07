@@ -32,8 +32,8 @@ public class QuizController {
     @Autowired
     AnswerRepository answerRepository;
 
-    @PostMapping("/create/{id}")
-    public ResponseEntity<Quiz> createQuiz (@PathVariable int id , @RequestBody Quiz quiz){
+    @PostMapping("/create/{userId}")
+    public ResponseEntity<Quiz> createQuiz (@PathVariable Long userId , @RequestBody Quiz quiz){
 
         List<Question> quizQuestions = new ArrayList<>();
         for (Question question: quiz.getQuestions()) {
@@ -51,8 +51,8 @@ public class QuizController {
         }
         Quiz q = new Quiz(quiz.getQuizTitle(),quiz.getQuizDescription(),quizQuestions,quiz.isPrivateStatus());
         quizRepository.save(q);
-        Author author = authorRepository.findById(id).
-                orElseThrow(()-> new RuntimeException("The user with the ID "+id+" not found "));
+        Author author = authorRepository.findById(userId).
+                orElseThrow(()-> new RuntimeException("The user with the ID "+ userId +" not found "));
         author.addQuiz2QuizList(q);
         authorRepository.save(author);
         return new ResponseEntity<Quiz>(q, HttpStatus.CREATED);
