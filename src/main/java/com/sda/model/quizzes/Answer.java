@@ -15,12 +15,15 @@ public class Answer {
 //    @NotBlank(message = "Please write an answer")
     private String answerStatement;
 
-//    @ManyToOne()
-//    @JoinColumn(name = "question_id")
-//    private Question question;
-
     public Answer(String answerStatement) {
         super();
         this.answerStatement = answerStatement;
     }
+
+    // ************
+    // Initial relationship, commented out for now
+//    @ManyToOne()
+//    @JoinColumn(name = "question_id")
+//    private Question question;
+    // ************
 }

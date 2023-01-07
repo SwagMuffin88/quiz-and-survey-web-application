@@ -18,13 +18,25 @@ public class AuthorController {
     @Autowired
     AuthorRepository authorRepository;
 
+//    @Autowired
+//    public AuthorController(AuthorRepository authorRepository) {
+//        this.authorRepository = authorRepository;
+//    }
+
+
+
+    @GetMapping("/hello")
+    @ResponseBody
+    public String greet() {
+        return "Welcome user";
+    }
+
     @PostMapping("/create")
     public ResponseEntity<Author> createUser ( @RequestBody Author author){
         Author newAuthor = new Author(author.getFirstName(),author.getLastName(), author.getUsername(),author.getPassword(),author.getEmail(),author.getDOB());
         authorRepository.save(newAuthor);
         return new ResponseEntity<Author>(newAuthor, HttpStatus.CREATED);
     }
-
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Author> updateUser (@PathVariable int id , @RequestBody Author author){

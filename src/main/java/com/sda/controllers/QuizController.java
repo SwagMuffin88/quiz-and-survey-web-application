@@ -62,7 +62,7 @@ public class QuizController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteQuizById (@PathVariable int id ){
         quizRepository.deleteById(id);
-        return new ResponseEntity<String>(" the quiz with the "+id+" is removed", HttpStatus.NO_CONTENT);
+        return new ResponseEntity<String>(" the quiz with the ID "+id+" is removed", HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/deleteAll")

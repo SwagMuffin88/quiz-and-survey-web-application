@@ -18,19 +18,23 @@ public class Question {
 
     private String correctAnswer;
 
-//    @OneToMany(targetEntity = Answer.class, mappedBy = "question",
-//        fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @OneToMany(orphanRemoval = true)
     @JoinColumn(name="question_id")
     private List<Answer> answers;
 
-//    @ManyToOne()
+    // **********
+    // Initial relationship, commented out for now due to data saving issues
+//    @OneToMany(targetEntity = Answer.class, mappedBy = "question",
+//        fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+
+    //    @ManyToOne()
 //    @JoinColumn(name = "quiz_id")
 //    private Quiz quiz;
+    // **********
 
-    public Question(String questionStatement
+    public Question(String questionStatement, String correctAnswer
 //            , List<Answer> answers
-            , String correctAnswer) {
+            ) {
         this.questionStatement = questionStatement;
 //        this.answers = answers;
         this.correctAnswer = correctAnswer;
