@@ -16,8 +16,6 @@ import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
 
-import static org.aspectj.weaver.tools.cache.SimpleCacheFactory.enabled;
-
 @Entity @Data @NoArgsConstructor
 public class Author implements UserDetails {
 
@@ -54,12 +52,6 @@ public class Author implements UserDetails {
 
     private boolean isActive;
 
-
-    //To DO: Move this to service
-    public void addQuiz2QuizList(Quiz quiz) {
-        quizzes.add(quiz);
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
@@ -78,6 +70,6 @@ public class Author implements UserDetails {
     }
     @Override
     public boolean isEnabled() {
-        return enabled; // <- correct static import?
+        return true;
     }
 }
