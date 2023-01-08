@@ -24,9 +24,9 @@ import java.util.Optional;
 @RequestMapping("/user")
 public class AuthorController {
     @Autowired
-    private final AuthorService authorService;
+    private AuthorService authorService;
     @Autowired
-    private final QuizRepository quizRepository;
+    private QuizRepository quizRepository;
 
     //** Not for API ***
     @GetMapping("/hello")
