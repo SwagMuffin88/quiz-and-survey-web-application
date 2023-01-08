@@ -3,6 +3,7 @@ package com.sda.model.users;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sda.model.quizzes.Quiz;
 import lombok.*;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,22 +19,22 @@ import java.util.List;
 
 @Entity @Data @NoArgsConstructor
 public class Author implements UserDetails {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 //    @Setter(AccessLevel.PROTECTED)  <- Might use later, needs more research
     private Long id;
+
     @NotBlank(message = "Firstname cannot be empty!")
     @Pattern(regexp = ("\\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+"),message = "The name can not have numbers")
     private String firstName;
+
     @NotBlank(message = "Lastname cannot be empty!")
     @Pattern(regexp = ("\\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+"),message = "The name can not have numbers")
     private String lastName;
 
     @NotBlank(message = "Username cannot be empty!")
-    @Column(unique = true)
     private String username;
-    @Size(min=5 , message = "The password can not be smaller than 5")
+    @Size(min=5 , message = "The password must have at least 5 characters")
     @NotBlank(message = "Password cannot be empty!")
 
     private String password;
