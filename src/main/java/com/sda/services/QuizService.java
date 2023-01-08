@@ -1,5 +1,6 @@
 package com.sda.services;
 
+import com.sda.exceptions.ResourceNotFoundException;
 import com.sda.model.quizzes.Answer;
 import com.sda.model.quizzes.Question;
 import com.sda.model.quizzes.Quiz;
@@ -9,6 +10,7 @@ import com.sda.repositories.AuthorRepository;
 import com.sda.repositories.QuestionRepository;
 import com.sda.repositories.QuizRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -39,19 +41,34 @@ public class QuizService {
             questionRepository.save(newQuestion);
             quizQuestions.add(newQuestion);
         }
-        Quiz q = new Quiz(quiz.getQuizTitle(), quiz.getQuizDescription(), quizQuestions, quiz.isPrivateStatus());
-        return q;
+        return new Quiz(quiz.getQuizTitle(), quiz.getQuizDescription(), quizQuestions, quiz.isPrivateStatus());
     }
 
-    public Quiz saveQuiz (Quiz quiz){return quizRepository.save(quiz);}
+    public Quiz findQuizById(long quizId) {
+        return quizRepository.findById(quizId).orElseThrow(() -> new ResourceNotFoundException("Quiz not found"));
+    }
+
+    public Quiz editQuiz(long quizId, Quiz quiz) {
+        Quiz quizToUpdate = findQuizById(quizId);
+        quizToUpdate.setQuizTitle(quiz.getQuizTitle());
+        quizToUpdate.setQuizDescription(quiz.getQuizDescription());
+        quizToUpdate.setPrivateStatus(quiz.isPrivateStatus());
+
+        saveQuiz(quizToUpdate);
+        return quizToUpdate;
+    }
+
+    public void saveQuiz (Quiz quiz) {
+        quizRepository.save(quiz);
+    }
 
     public void addQuizToAuthor(String username, String quizTitle) {
         Author author = authorRepository.findByUsername(username);
         Quiz quiz = quizRepository.findByQuizTitle(quizTitle);
         if (quiz != null) author.getQuizzes().add(quiz);
     }
-
-    public void deleteQuiz(int quizId) {
-        quizRepository.deleteById(quizId);
+    public void disableQuiz(long quizId) {
+        Quiz quiz = findQuizById(quizId);
+        quiz.setAvailable(!quiz.isAvailable());
     }
 }

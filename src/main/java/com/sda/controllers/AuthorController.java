@@ -35,12 +35,12 @@ public class AuthorController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Author> updateUser (@PathVariable Long id , @RequestBody Author author){
-        return authorService.updateAuthor(id, author);
+        return new ResponseEntity<Author>(authorService.updateAuthor(id, author), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Author> getUserById (@PathVariable Long id ){
-        Author author =authorService.findAuthorById(id);
+        Author author = authorService.findAuthorById(id);
         return new ResponseEntity<Author>(author,HttpStatus.OK);
     }
 

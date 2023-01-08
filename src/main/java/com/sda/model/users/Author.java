@@ -3,9 +3,7 @@ package com.sda.model.users;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sda.model.quizzes.Quiz;
 import lombok.*;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -21,7 +19,6 @@ import java.util.List;
 public class Author implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-//    @Setter(AccessLevel.PROTECTED)  <- Might use later, needs more research
     private Long id;
 
     @NotBlank(message = "Firstname cannot be empty!")
@@ -49,7 +46,7 @@ public class Author implements UserDetails {
     @OneToMany
     List<Quiz> quizzes;
 
-    private boolean isActive;
+    private boolean isAvailable;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

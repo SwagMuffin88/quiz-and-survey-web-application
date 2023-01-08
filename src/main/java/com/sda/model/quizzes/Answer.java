@@ -14,6 +14,9 @@ public class Answer {
 //    @NotBlank(message = "Please write an answer")
     private String answerStatement;
 
+    private boolean isAvailable;
+
+    // todo ***
     public Answer(String answerStatement) {
         this.answerStatement = answerStatement;
     }

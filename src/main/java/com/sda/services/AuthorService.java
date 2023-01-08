@@ -32,22 +32,23 @@ public class AuthorService {
     public void saveNewAuthor(Author author) {
         if (findAuthor(author.getUsername()) == null) {
             author.setPassword(passwordEncoder.encode(author.getPassword()));
-            author.setActive(true);
+            author.setAvailable(true);
             authorRepository.save(author);
         } else {
             throw new ResourceNotFoundException("Username is already in use");
         }
     }
-    public ResponseEntity<Author> updateAuthor( Long id, Author author) {
-        Author authorToUpdate = authorRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("The user with the ID "+id+" not found "));
+    public Author updateAuthor( Long id, Author author) {
+        Author authorToUpdate = authorRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("The user with the ID "+id+" not found "));
         authorToUpdate.setLastName(author.getLastName());
         authorToUpdate.setFirstName(author.getFirstName());
         authorToUpdate.setPassword(author.getPassword());
         authorToUpdate.setUsername(author.getUsername());
-        authorToUpdate.setActive(author.isActive());
+        authorToUpdate.setAvailable(author.isAvailable());
         authorToUpdate.setDateOfBirth(author.getDateOfBirth());
         authorRepository.save(authorToUpdate);
-        return new ResponseEntity<Author>(authorToUpdate, HttpStatus.OK);
+        return authorToUpdate;
 
 
 //        Optional<Author> authorToUpdate = authorRepository.findById(id);

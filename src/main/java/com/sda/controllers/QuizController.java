@@ -18,6 +18,7 @@ public class QuizController {
     @Autowired
     QuizService quizService;
 
+    //("/{id}/edit/question/{id})
     @PostMapping("/create/{userId}")
     public ResponseEntity<Quiz> createQuizAndAddToUser(@PathVariable Long userId, @RequestBody Quiz quiz) {
 
@@ -30,16 +31,21 @@ public class QuizController {
         //add quiz to the quizzes list of the user
         quizService.addQuizToAuthor(author.getUsername(), quiz.getQuizTitle());
         // and save the changes in the DB
-        authorService.updateAuthor(userId, author); // <- might be redundant
+        authorService.updateAuthor(userId, author);
         return new ResponseEntity<Quiz>(quiz, HttpStatus.CREATED);
     }
 
-//    @DeleteMapping("/delete/{id}")
-//    public ResponseEntity<String> deleteQuizById (@PathVariable int id ){
-//        quizService.deleteQuiz(id);
-//        return new ResponseEntity<String>(" the quiz with the ID "+id+" is removed",
-//                HttpStatus.NO_CONTENT);
-//    }
+    @PutMapping("/edit/{id}")
+    public ResponseEntity<Quiz> editQuizById(@PathVariable long id, @RequestBody Quiz quiz) {
+        Quiz updatedQuiz = quizService.editQuiz(id, quiz);
+        return new ResponseEntity<>(updatedQuiz, HttpStatus.OK);
+    }
+
+    @PutMapping("/remove/{id}")
+    public ResponseEntity<String> removeQuizById(@PathVariable long id) {
+        quizService.disableQuiz(id);
+        return new ResponseEntity<String>("The quiz with ID " + id + " is removed", HttpStatus.NO_CONTENT);
+    }
 
 
 }

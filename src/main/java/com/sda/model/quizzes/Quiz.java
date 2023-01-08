@@ -11,7 +11,7 @@ public class Quiz {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int quizId;
+    private long quizId;
 
 //    @NotBlank(message = "Please add a quiz title")
     private String quizTitle;
@@ -21,6 +21,9 @@ public class Quiz {
     @OneToMany(orphanRemoval = true)
     @JoinColumn(name="quiz_id")
     private List<Question> questions;
+
+    private boolean isAvailable;
+
 
     // ********
     // Initial relationship, commented out for now due to data saving issues
@@ -33,6 +36,7 @@ public class Quiz {
 
     private boolean privateStatus;
 
+    // todo Is the constructor necessary?
     public Quiz(String quizTitle, String quizDescription, List<Question> questions, boolean privateStatus) {
         this.quizTitle = quizTitle;
         this.quizDescription = quizDescription;

@@ -10,7 +10,7 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int questionId;
+    private long questionId;
 
 //    @NotBlank(message = "Please write a question")
     private String questionStatement;
@@ -20,6 +20,8 @@ public class Question {
     @OneToMany(orphanRemoval = true)
     @JoinColumn(name="question_id")
     private List<Answer> answers;
+
+    private boolean isAvailable;
 
 
     public Question(String questionStatement, String correctAnswer, List<Answer> answers) {
