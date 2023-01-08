@@ -5,6 +5,7 @@ import com.sda.model.quizzes.Quiz;
 import com.sda.model.users.Author;
 import com.sda.services.QuestionService;
 import com.sda.services.QuizService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,16 +14,14 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RequestMapping("/question")
 public class QuestionController {
+    @Autowired
     private QuestionService questionService;
+    @Autowired
     private QuizService quizService;
 
     @PostMapping("/create/{quizId}")
-    public ResponseEntity<Question> createQuestionAndAddToQuiz(
-            @PathVariable long quizId, @RequestBody Question question) {
-
-        System.out.println("1");
+    public ResponseEntity<Question> createQuestionAndAddToQuiz(@PathVariable long quizId, @RequestBody Question question) {
         Quiz quiz = quizService.findQuizById(quizId);
-        System.out.println("2");
         Question newQuestion = questionService.createQuestion(question);
         questionService.saveQuestion(newQuestion);
         questionService.addQuestionToQuiz(quizId, newQuestion);

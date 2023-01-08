@@ -18,10 +18,9 @@ public class QuizController {
     @Autowired
     QuizService quizService;
 
-    //("/{id}/edit/question/{id})
     @PostMapping("/create/{userId}")
     public ResponseEntity<Quiz> createQuizAndAddToUser(@PathVariable Long userId, @RequestBody Quiz quiz) {
-
+        System.out.println(quiz.toString());
         //check if there is user with the provided ID first
         Author author = authorService.findAuthorById(userId);
         // Create quiz entity
@@ -45,6 +44,12 @@ public class QuizController {
     public ResponseEntity<String> removeQuizById(@PathVariable long id) {
         quizService.disableQuiz(id);
         return new ResponseEntity<String>("The quiz with ID " + id + " is removed", HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/getbyid/{id}")
+    public ResponseEntity<Quiz> getQuizById(@PathVariable long id){
+        Quiz quiz = quizService.findQuizById(id);
+        return new ResponseEntity<>(quiz, HttpStatus.OK);
     }
 
 

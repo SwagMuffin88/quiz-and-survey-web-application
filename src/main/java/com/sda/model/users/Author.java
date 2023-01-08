@@ -46,7 +46,8 @@ public class Author implements UserDetails {
     @OneToMany
     List<Quiz> quizzes;
 
-    private boolean isAvailable;
+    private boolean available;
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -68,4 +69,6 @@ public class Author implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }

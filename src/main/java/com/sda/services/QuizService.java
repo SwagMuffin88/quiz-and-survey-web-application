@@ -45,7 +45,8 @@ public class QuizService {
     }
 
     public Quiz findQuizById(long quizId) {
-        return quizRepository.findById(quizId).orElseThrow(() -> new ResourceNotFoundException("Quiz not found"));
+        Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new ResourceNotFoundException("Quiz not found"));
+        return quiz;
     }
 
     public Quiz editQuiz(long quizId, Quiz quiz) {
