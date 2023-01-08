@@ -26,7 +26,7 @@ public class QuizService {
 
     private final AnswerRepository answerRepository;
 
-    public void createQuiz(@RequestBody Quiz quiz) {
+    public Quiz createQuiz( Quiz quiz) {
         List<Question> quizQuestions = new ArrayList<>();
         for (Question question : quiz.getQuestions()) {
             List<Answer> answersList = new ArrayList<>();
@@ -42,8 +42,10 @@ public class QuizService {
             quizQuestions.add(newQuestion);
         }
         Quiz q = new Quiz(quiz.getQuizTitle(), quiz.getQuizDescription(), quizQuestions, quiz.isPrivateStatus());
-        quizRepository.save(q);
+        return q;
     }
+
+    public Quiz saveQuiz (Quiz quiz){return quizRepository.save(quiz);}
 
     public void addQuizToAuthor(String username, String quizTitle) {
         Author author = authorRepository.findByUsername(username);

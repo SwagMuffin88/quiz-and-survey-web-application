@@ -1,5 +1,6 @@
 package com.sda.services;
 
+import com.sda.exceptions.ResourceNotFoundException;
 import com.sda.model.users.Author;
 import com.sda.repositories.AuthorRepository;
 import com.sda.repositories.QuizRepository;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,24 +22,39 @@ public class AuthorService {
     private final QuizRepository quizRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public Optional<Author> findAuthor(Long id) {
-        return authorRepository.findById(id);
+    public Author findAuthorById(Long id) {
+        Optional<Author> author = authorRepository.findById(id);
+        return author.orElseThrow(()-> new ResourceNotFoundException("The user with the ID "+id+" not found "));
     }
-    public void saveNewAuthor(@RequestBody Author author) {
+
+
+    public void saveNewAuthor(Author author) {
         author.setPassword(passwordEncoder.encode(author.getPassword()));
         author.setActive(true);
         authorRepository.save(author);
     }
 
-    public ResponseEntity<Author> updateAuthor(@RequestBody Long id, Author author) {
-        Optional<Author> authorToUpdate = authorRepository.findById(id);
-        if(authorToUpdate.isEmpty()){
-            return new ResponseEntity<Author>(author, HttpStatus.NOT_FOUND);
-        } else {
-            authorRepository.save(author);
-            return new ResponseEntity<Author>(author, HttpStatus.OK);
-        }
+    public ResponseEntity<Author> updateAuthor( Long id, Author author) {
+        Author authorToUpdate = authorRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("The user with the ID "+id+" not found "));
+        authorToUpdate.setLastName(author.getLastName());
+        authorToUpdate.setFirstName(author.getFirstName());
+        authorToUpdate.setPassword(author.getPassword());
+        authorToUpdate.setUsername(author.getUsername());
+        authorToUpdate.setActive(author.isActive());
+        authorToUpdate.setDateOfBirth(author.getDateOfBirth());
+        authorRepository.save(authorToUpdate);
+        return new ResponseEntity<Author>(authorToUpdate, HttpStatus.OK);
+
+
+//        Optional<Author> authorToUpdate = authorRepository.findById(id);
+//         if(authorToUpdate.isPresent()){
+//             authorRepository.save(author);
+//             return new ResponseEntity<Author>(author, HttpStatus.OK);
+//         }else {
+//             throw new ResourceNotFoundException("The id "+id+" does not exist");
+//        }
     }
+
     public List<Author> getAuthors(){
         return authorRepository.findAll();
     }

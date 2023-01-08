@@ -44,25 +44,15 @@ public class AuthorController {
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Author> updateUser (@PathVariable Long id , @RequestBody Author author){
-
         return authorService.updateAuthor(id, author);
-
-        //Optional<Author> authorToUpdate = authorRepository.findById(id);
-
-       // if(authorToUpdate.isPresent()){
-       //     authorRepository.save(author);
-       //     return new ResponseEntity<Author>(author, HttpStatus.OK);
-       // }else {
-       //     throw new ResourceNotFoundException("The id "+id+" does not exsist ");
-        //}
-
     }
 
-//    @PutMapping("/save-quiz")
-//    public ResponseEntity<Author> saveAuthorQuiz (@RequestBody Author author, @RequestBody Quiz quiz) {
-//        quizRepository.addQuizToAuthor(author.getUsername(), quiz.getQuizTitle());
-//        return new ResponseEntity<Author>(author, HttpStatus.OK);
-//    }
+    @GetMapping("/{id}")
+    public ResponseEntity<Author> getUserById (@PathVariable Long id ){
+        Author author =authorService.findAuthorById(id);
+        return new ResponseEntity<Author>(author,HttpStatus.OK);
+    }
+
 
     // For endpoint testing:
     @GetMapping("/view-users")
