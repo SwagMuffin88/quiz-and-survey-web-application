@@ -9,10 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.transaction.Transactional;
-import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,13 +25,19 @@ public class AuthorService {
         return author.orElseThrow(()-> new ResourceNotFoundException("The user with the ID "+id+" not found "));
     }
 
-
-    public void saveNewAuthor(Author author) {
-        author.setPassword(passwordEncoder.encode(author.getPassword()));
-        author.setActive(true);
-        authorRepository.save(author);
+    public Author findAuthor(String username) {
+        return authorRepository.findByUsername(username);
     }
 
+    public void saveNewAuthor(Author author) {
+        if (findAuthor(author.getUsername()) == null) {
+            author.setPassword(passwordEncoder.encode(author.getPassword()));
+            author.setActive(true);
+            authorRepository.save(author);
+        } else {
+            throw new ResourceNotFoundException("Username is already in use");
+        }
+    }
     public ResponseEntity<Author> updateAuthor( Long id, Author author) {
         Author authorToUpdate = authorRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("The user with the ID "+id+" not found "));
         authorToUpdate.setLastName(author.getLastName());
