@@ -2,7 +2,6 @@ package com.sda.controllers;
 
 import com.sda.model.quizzes.Question;
 import com.sda.model.quizzes.Quiz;
-import com.sda.model.users.Author;
 import com.sda.services.QuestionService;
 import com.sda.services.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;

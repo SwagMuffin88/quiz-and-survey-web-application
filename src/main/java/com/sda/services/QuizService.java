@@ -10,7 +10,6 @@ import com.sda.repositories.AuthorRepository;
 import com.sda.repositories.QuestionRepository;
 import com.sda.repositories.QuizRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

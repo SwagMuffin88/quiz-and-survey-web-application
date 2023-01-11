@@ -4,7 +4,6 @@ import com.sda.exceptions.ResourceNotFoundException;
 import com.sda.model.quizzes.Answer;
 import com.sda.model.quizzes.Question;
 import com.sda.model.quizzes.Quiz;
-import com.sda.model.users.Author;
 import com.sda.repositories.AnswerRepository;
 import com.sda.repositories.AuthorRepository;
 import com.sda.repositories.QuestionRepository;

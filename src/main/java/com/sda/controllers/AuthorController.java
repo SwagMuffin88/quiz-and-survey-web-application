@@ -1,13 +1,7 @@
 package com.sda.controllers;
 
 
-import com.sda.model.quizzes.Question;
-import com.sda.model.quizzes.Quiz;
-import com.sda.repositories.AuthorRepository;
-import com.sda.exceptions.ResourceNotFoundException;
-
 import com.sda.model.users.Author;
-import com.sda.repositories.AuthorRepository;
 import com.sda.repositories.QuizRepository;
 import com.sda.services.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin
