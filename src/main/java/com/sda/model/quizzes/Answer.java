@@ -16,15 +16,4 @@ public class Answer {
 
     private boolean isAvailable;
 
-    // todo ***
-    public Answer(String answerStatement) {
-        this.answerStatement = answerStatement;
-    }
-
-    // ************
-    // Initial relationship, commented out for now
-//    @ManyToOne()
-//    @JoinColumn(name = "question_id")
-//    private Question question;
-    // ************
 }

@@ -70,5 +70,4 @@ public class Author implements UserDetails {
         return true;
     }
 
-
 }

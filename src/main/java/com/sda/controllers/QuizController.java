@@ -49,8 +49,8 @@ public class QuizController {
     @GetMapping("/getbyid/{id}")
     public ResponseEntity<Quiz> getQuizById(@PathVariable long id){
         Quiz quiz = quizService.findQuizById(id);
-        return new ResponseEntity<>(quiz, HttpStatus.OK);
+        if (quiz.isAvailable()) {
+            return new ResponseEntity<>(quiz, HttpStatus.OK);
+        } else return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-
 }

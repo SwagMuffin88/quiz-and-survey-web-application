@@ -40,7 +40,12 @@ public class QuizService {
             questionRepository.save(newQuestion);
             quizQuestions.add(newQuestion);
         }
-        return new Quiz(quiz.getQuizTitle(), quiz.getQuizDescription(), quizQuestions, quiz.isPrivateStatus());
+        Quiz newQuiz = new Quiz();
+        newQuiz.setQuizTitle(quiz.getQuizTitle());
+        newQuiz.setQuizDescription(quiz.getQuizDescription());
+        newQuiz.setQuestions(quizQuestions);
+        newQuiz.setPrivateStatus(quiz.isPrivateStatus());
+        return newQuiz;
     }
 
     public Quiz findQuizById(long quizId) {
