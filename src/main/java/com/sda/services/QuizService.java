@@ -78,6 +78,13 @@ public class QuizService {
     }
 
     public List<Quiz> getAllQuizzes(){
-        return quizRepository.findAll();
+        List<Quiz> availbleA = new ArrayList<>();
+        List<Quiz> quizzes= quizRepository.findAll();
+        for (Quiz q:quizzes ) {
+            if(q.isAvailable()){
+                availbleA.add(q);
+            }
+        }
+        return availbleA;
     }
 }

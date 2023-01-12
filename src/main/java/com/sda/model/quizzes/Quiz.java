@@ -21,6 +21,8 @@ public class Quiz {
     @OneToMany
     private List<Question> questions;
 
+    @OneToMany
+    private List<Participant> quizParticipant;
     private boolean isAvailable;
 
     private boolean privateStatus;
