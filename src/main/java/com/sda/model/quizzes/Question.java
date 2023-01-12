@@ -17,16 +17,9 @@ public class Question {
 
     private String correctAnswer;
 
-    @OneToMany(orphanRemoval = true)
-    @JoinColumn(name="question_id")
+    @OneToMany
     private List<Answer> answers;
 
     private boolean isAvailable;
 
-    // todo ****
-    public Question(String questionStatement, String correctAnswer, List<Answer> answers) {
-        this.questionStatement = questionStatement;
-        this.answers = answers;
-        this.correctAnswer = correctAnswer;
-    }
 }

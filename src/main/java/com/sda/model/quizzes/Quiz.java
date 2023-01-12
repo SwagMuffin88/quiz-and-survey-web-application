@@ -18,29 +18,11 @@ public class Quiz {
     @NotBlank(message = "Please add a quiz description")
     private String quizDescription;
 
-    @OneToMany(orphanRemoval = true)
-    @JoinColumn(name="quiz_id")
+    @OneToMany
     private List<Question> questions;
 
     private boolean isAvailable;
 
     private boolean privateStatus;
-
-    // todo Is the constructor necessary?
-    public Quiz(String quizTitle, String quizDescription, List<Question> questions, boolean privateStatus) {
-        this.quizTitle = quizTitle;
-        this.quizDescription = quizDescription;
-        this.questions = questions;
-        this.privateStatus = privateStatus;
-    }
-
-    // ********
-    // Initial relationship, commented out for now due to data saving issues
-    //    @OneToMany(targetEntity = Question.class, mappedBy = "quiz", fetch = FetchType.EAGER,
-//        cascade = CascadeType.ALL)
-    //    @ManyToOne()
-//    @JoinColumn(name = "author_id")
-//    private Author author;
-    //*******
 
 }
