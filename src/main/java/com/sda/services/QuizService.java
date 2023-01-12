@@ -76,4 +76,8 @@ public class QuizService {
         Quiz quiz = findQuizById(quizId);
         quiz.setAvailable(!quiz.isAvailable());
     }
+
+    public List<Quiz> getAllQuizzes(){
+        return quizRepository.findAll();
+    }
 }

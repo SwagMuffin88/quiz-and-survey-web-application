@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/quiz")
@@ -49,8 +51,15 @@ public class QuizController {
     @GetMapping("/getbyid/{id}")
     public ResponseEntity<Quiz> getQuizById(@PathVariable long id){
         Quiz quiz = quizService.findQuizById(id);
-        if (quiz.isAvailable()) {
-            return new ResponseEntity<>(quiz, HttpStatus.OK);
-        } else return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(quiz, HttpStatus.OK);
     }
+
+    @GetMapping("/getAll")
+    public ResponseEntity<List<Quiz>> getAll(){
+        List<Quiz> quizs = quizService.getAllQuizzes();
+        return new ResponseEntity<>(quizs, HttpStatus.OK);
+    }
+
+
+
 }
