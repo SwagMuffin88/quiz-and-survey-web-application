@@ -21,10 +21,10 @@ public class AuthorService {
     private final PasswordEncoder passwordEncoder;
 
     public Author findAuthorById(Long id) {
+        // Finds all authors in the database regardless of availability
         Optional<Author> author = authorRepository.findById(id);
-        return author.orElseThrow(()-> new ResourceNotFoundException("The user with the ID "+id+" not found "));
+        return author.orElseThrow(()-> new ResourceNotFoundException("The user with the ID " + id + " not found "));
     }
-
 
     public void saveNewAuthor(Author author) {
         author.setPassword(passwordEncoder.encode(author.getPassword()));
@@ -33,16 +33,18 @@ public class AuthorService {
     }
 
     public ResponseEntity<Author> updateAuthor( Long id, Author author) {
-        Author authorToUpdate = authorRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("The user with the ID "+id+" not found "));
+        // Finds and updates author entity regardless of availability
+        // Ideally, disabled users should not be modifiable.
+        Author authorToUpdate = authorRepository.findById(id).orElseThrow(
+                ()-> new ResourceNotFoundException("The user with the ID "+id+" not found "));
         authorToUpdate.setLastName(author.getLastName());
         authorToUpdate.setFirstName(author.getFirstName());
         authorToUpdate.setPassword(author.getPassword());
         authorToUpdate.setUsername(author.getUsername());
         authorToUpdate.setAvailable(author.isAvailable());
         authorToUpdate.setDateOfBirth(author.getDateOfBirth());
-        authorRepository.save(authorToUpdate);
+        authorRepository.saveAndFlush(authorToUpdate);
         return new ResponseEntity<Author>(authorToUpdate, HttpStatus.OK);
-
 
 //        Optional<Author> authorToUpdate = authorRepository.findById(id);
 //         if(authorToUpdate.isPresent()){
@@ -53,9 +55,27 @@ public class AuthorService {
 //        }
     }
 
-    public List<Author> getAuthors(){
-        return authorRepository.findAll();
+    public void disableAuthor(long authorId) {
+        Author author = findAuthorById(authorId);
+        author.setAvailable(!author.isAvailable());
     }
 
+    // Method for recovering account
+    // Look for specific user in database, set availability to true
+//     List<Author> removedAuthors = new ArrayList<>();
+    // Author author = authorRepository.findAll()
+    // if author.isAvailable() = true {
+    //  removedAuthors.add(author)...
+
+
+    //    public List<Author> getAvailableAuthors(){
+//        return authorRepository.findAuthorsByIsAvailableIsTrue().orElseThrow(() ->
+//                new ResourceNotFoundException("Available users not found"));
+//    }
+
+    // Should be removed once project is finished
+    public List<Author> getAllAuthors() {
+        return authorRepository.findAll();
+    }
 
 }

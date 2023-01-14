@@ -3,6 +3,7 @@ package com.sda.model.users;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sda.model.quizzes.Quiz;
 import lombok.*;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -42,10 +43,12 @@ public class Author implements UserDetails {
 
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dateOfBirth;
+//
+//    @OneToMany
+//    List<Quiz> quizzes;
 
-    @OneToMany
-    List<Quiz> quizzes;
-
+    @Column(columnDefinition="tinyint(1) default 1")
+//    @Column(columnDefinition = "boolean default true")
     private boolean isAvailable;
 
     @Override

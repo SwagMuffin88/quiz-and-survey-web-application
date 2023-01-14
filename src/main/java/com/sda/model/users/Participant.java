@@ -1,4 +1,4 @@
-package com.sda.model.quizzes;
+package com.sda.model.users;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,12 +16,12 @@ import javax.validation.constraints.NotBlank;
 public class Participant {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private  long id;
+    private Long participantId;
     @NotBlank
     private String firstName;
     @NotBlank
     private String lastName;
     @NotBlank
-    private int score;
+    private double score;
     
 }
