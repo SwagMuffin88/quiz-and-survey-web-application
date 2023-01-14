@@ -31,9 +31,9 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .anyRequest()
                 .permitAll()
+//                .antMatchers()
                 .and()
                 .httpBasic();
-        http.formLogin();
         return http.build();
     }
 
@@ -55,7 +55,6 @@ public class SecurityConfig {
 //                .and()
 //                .authenticationProvider(authenticationProvider)
 //                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-//        http.formLogin();
 //        return http.build();
 //    }
 

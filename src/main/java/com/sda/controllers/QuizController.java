@@ -1,5 +1,6 @@
 package com.sda.controllers;
 
+import com.sda.exceptions.ResourceNotFoundException;
 import com.sda.model.quizzes.Quiz;
 import com.sda.model.users.Author;
 import com.sda.services.AuthorService;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin
 @RequestMapping("/quiz")
 public class QuizController {
     @Autowired
@@ -33,13 +33,13 @@ public class QuizController {
         quizService.addQuizToAuthor(author.getUsername(), quiz.getQuizTitle());
         // and save the changes in the DB
         authorService.updateAuthor(userId, author);
-        return new ResponseEntity<Quiz>(quiz, HttpStatus.CREATED);
+        return new ResponseEntity<Quiz>(newQuiz, HttpStatus.CREATED);
     }
 
     @PutMapping("/edit/{id}")
     public ResponseEntity<Quiz> editQuizById(@PathVariable long id, @RequestBody Quiz quiz) {
-        Quiz updatedQuiz = quizService.editQuiz(id, quiz);
-        return new ResponseEntity<>(updatedQuiz, HttpStatus.OK);
+            Quiz updatedQuiz = quizService.editQuiz(id, quiz);
+            return new ResponseEntity<>(updatedQuiz, HttpStatus.OK);
     }
 
     @PutMapping("/remove/{id}")
@@ -48,18 +48,16 @@ public class QuizController {
         return new ResponseEntity<String>("The quiz with ID " + id + " is removed", HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/getbyid/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Quiz> getQuizById(@PathVariable long id){
-        Quiz quiz = quizService.findQuizById(id);
-        return new ResponseEntity<>(quiz, HttpStatus.OK);
+            Quiz quiz = quizService.findQuizById(id);
+            return new ResponseEntity<>(quiz, HttpStatus.OK);
     }
 
-    @GetMapping("/getAll")
+    @GetMapping("/all-quizzes")
     public ResponseEntity<List<Quiz>> getAll(){
-        List<Quiz> quizs = quizService.getAllQuizzes();
-        return new ResponseEntity<>(quizs, HttpStatus.OK);
+        List<Quiz> quizzes = quizService.getAllQuizzes();
+        return new ResponseEntity<>(quizzes, HttpStatus.OK);
     }
-
-
 
 }

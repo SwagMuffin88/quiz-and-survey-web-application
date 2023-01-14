@@ -5,10 +5,8 @@ import com.sda.model.quizzes.Answer;
 import com.sda.model.quizzes.Question;
 import com.sda.model.quizzes.Quiz;
 import com.sda.model.users.Author;
-import com.sda.repositories.AnswerRepository;
-import com.sda.repositories.AuthorRepository;
-import com.sda.repositories.QuestionRepository;
-import com.sda.repositories.QuizRepository;
+import com.sda.model.users.Participant;
+import com.sda.repositories.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,23 +18,25 @@ import java.util.List;
 public class QuizService {
     private final AuthorRepository authorRepository;
     private final QuizRepository quizRepository;
-
     private final QuestionRepository questionRepository;
-
     private final AnswerRepository answerRepository;
+    private final ParticipantRepository participantRepository;
 
-    public Quiz createQuiz( Quiz quiz) {
+
+    public Quiz createQuiz(Quiz quiz) {
         List<Question> quizQuestions = new ArrayList<>();
         for (Question question : quiz.getQuestions()) {
             List<Answer> answersList = new ArrayList<>();
             Question newQuestion = new Question();
             newQuestion.setQuestionStatement(question.getQuestionStatement());
             for (Answer a : question.getAnswers()) {
+                a.setAvailable(true);
                 answerRepository.save(a);
                 answersList.add(a);
             }
             newQuestion.setAnswers(answersList);
             newQuestion.setCorrectAnswer(question.getAnswers().get(0).getAnswerStatement());
+            newQuestion.setAvailable(true);
             questionRepository.save(newQuestion);
             quizQuestions.add(newQuestion);
         }
@@ -44,20 +44,21 @@ public class QuizService {
         newQuiz.setQuizTitle(quiz.getQuizTitle());
         newQuiz.setQuizDescription(quiz.getQuizDescription());
         newQuiz.setQuestions(quizQuestions);
-        newQuiz.setPrivateStatus(quiz.isPrivateStatus());
+        newQuiz.setPublic(quiz.isPublic());
+        newQuiz.setAvailable(true);
         return newQuiz;
     }
 
     public Quiz findQuizById(long quizId) {
-        Quiz quiz = quizRepository.findById(quizId).orElseThrow(() -> new ResourceNotFoundException("Quiz not found"));
-        return quiz;
+        return quizRepository.findById(quizId).orElseThrow(
+                () -> new ResourceNotFoundException("Quiz not found"));
     }
 
     public Quiz editQuiz(long quizId, Quiz quiz) {
         Quiz quizToUpdate = findQuizById(quizId);
         quizToUpdate.setQuizTitle(quiz.getQuizTitle());
         quizToUpdate.setQuizDescription(quiz.getQuizDescription());
-        quizToUpdate.setPrivateStatus(quiz.isPrivateStatus());
+        quizToUpdate.setPublic(quiz.isPublic());
 
         saveQuiz(quizToUpdate);
         return quizToUpdate;
@@ -71,20 +72,29 @@ public class QuizService {
         Author author = authorRepository.findByUsername(username);
         Quiz quiz = quizRepository.findByQuizTitle(quizTitle);
         if (quiz != null) author.getQuizzes().add(quiz);
+        // Change arguments to ID
     }
+
+    public List<Participant> getAllParticipantsByQuizId(long quizId) {
+        Quiz quiz = quizRepository.findById(quizId).orElseThrow(() ->
+                new ResourceNotFoundException("Quiz not found"));
+        return quiz.getParticipantList();
+    }
+
     public void disableQuiz(long quizId) {
         Quiz quiz = findQuizById(quizId);
         quiz.setAvailable(!quiz.isAvailable());
     }
 
     public List<Quiz> getAllQuizzes(){
-        List<Quiz> availbleA = new ArrayList<>();
-        List<Quiz> quizzes= quizRepository.findAll();
-        for (Quiz q:quizzes ) {
-            if(q.isAvailable()){
-                availbleA.add(q);
-            }
-        }
-        return availbleA;
+        return quizRepository.findAll();
+//        List<Quiz> availbleA = new ArrayList<>();
+//        List<Quiz> quizzes= quizRepository.findAll();
+//        for (Quiz q:quizzes ) {
+//            if(q.isAvailable()){
+//                availbleA.add(q);
+//            }
+//        }
+//        return availbleA;
     }
 }

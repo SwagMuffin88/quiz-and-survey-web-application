@@ -63,6 +63,7 @@ public class QuestionService {
         }
         newQuestion.setAnswers(answersList);
         newQuestion.setCorrectAnswer(question.getAnswers().get(0).getAnswerStatement());
+        newQuestion.setAvailable(true);
         questionRepository.save(newQuestion);
 
         return newQuestion;
