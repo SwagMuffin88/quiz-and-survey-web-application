@@ -41,18 +41,11 @@ public class AuthorService {
         authorToUpdate.setFirstName(author.getFirstName());
         authorToUpdate.setPassword(author.getPassword());
         authorToUpdate.setUsername(author.getUsername());
-        authorToUpdate.setAvailable(author.isAvailable());
+        authorToUpdate.setAvailable(true);
         authorToUpdate.setDateOfBirth(author.getDateOfBirth());
         authorRepository.saveAndFlush(authorToUpdate);
         return new ResponseEntity<Author>(authorToUpdate, HttpStatus.OK);
 
-//        Optional<Author> authorToUpdate = authorRepository.findById(id);
-//         if(authorToUpdate.isPresent()){
-//             authorRepository.save(author);
-//             return new ResponseEntity<Author>(author, HttpStatus.OK);
-//         }else {
-//             throw new ResourceNotFoundException("The id "+id+" does not exist");
-//        }
     }
 
     public void disableAuthor(long authorId) {

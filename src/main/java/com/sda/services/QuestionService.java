@@ -62,10 +62,16 @@ public class QuestionService {
             answersList.add(a);
         }
         newQuestion.setAnswers(answersList);
-        newQuestion.setCorrectAnswer(question.getAnswers().get(0).getAnswerStatement());
+        newQuestion.setCorrectAnswer(question.getAnswers().get(0));
         newQuestion.setAvailable(true);
         questionRepository.save(newQuestion);
 
         return newQuestion;
+    }
+
+    public Question changeWQuestionStatusToUnavailable (long id){
+       Question question = findQuestionById(id);
+       question.setAvailable(false);
+       return questionRepository.save(question);
     }
 }

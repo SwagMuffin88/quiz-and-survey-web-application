@@ -23,11 +23,11 @@ public class Author implements UserDetails {
     private Long id;
 
     @NotBlank(message = "Firstname cannot be empty!")
-    @Pattern(regexp = ("\\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+"),message = "The name can not have numbers")
+    @Pattern(regexp = ("\\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+"),message = "Please make sure that the name format is correct and that the first letter is Uppercase")
     private String firstName;
 
     @NotBlank(message = "Lastname cannot be empty!")
-    @Pattern(regexp = ("\\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+"),message = "The name can not have numbers")
+    @Pattern(regexp = ("\\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+"),message = "Please make sure that the name format is correct and that the first letter is Uppercase")
     private String lastName;
 
     @NotBlank(message = "Username cannot be empty!")

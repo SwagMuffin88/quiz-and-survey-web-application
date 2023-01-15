@@ -23,9 +23,14 @@ public class QuestionController {
         Question newQuestion = questionService.createQuestion(question);
         questionService.saveQuestion(newQuestion);
         questionService.addQuestionToQuiz(quizId, newQuestion);
-
         quizService.editQuiz(quizId, quiz);
         return new ResponseEntity<Question>(newQuestion, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/remove/{id}")
+    public ResponseEntity<String> removeQuestionById(@PathVariable long id) {
+        questionService.changeWQuestionStatusToUnavailable(id);
+        return new ResponseEntity<String>("The quiz with ID " + id + " is removed", HttpStatus.NO_CONTENT);
     }
 
 

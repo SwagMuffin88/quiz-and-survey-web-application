@@ -22,17 +22,10 @@ public class QuizController {
 
     @PostMapping("/create/{userId}")
     public ResponseEntity<Quiz> createQuizAndAddToUser(@PathVariable Long userId, @RequestBody Quiz quiz) {
-        System.out.println(quiz.toString());
-        //check if there is user with the provided ID first
-        Author author = authorService.findAuthorById(userId);
         // Create quiz entity
-        Quiz newQuiz = quizService.createQuiz(quiz);
+        Quiz newQuiz = quizService.createQuiz(quiz ,userId);
         //Save the quiz entity
         quizService.saveQuiz(newQuiz);
-        //add quiz to the quizzes list of the user
-        quizService.addQuizToAuthor(author.getUsername(), quiz.getQuizTitle());
-        // and save the changes in the DB
-        authorService.updateAuthor(userId, author);
         return new ResponseEntity<Quiz>(newQuiz, HttpStatus.CREATED);
     }
 
@@ -52,6 +45,13 @@ public class QuizController {
     public ResponseEntity<Quiz> getQuizById(@PathVariable long id){
             Quiz quiz = quizService.findQuizById(id);
             return new ResponseEntity<>(quiz, HttpStatus.OK);
+    }
+
+    @GetMapping("/userQuizzes/{id}")
+    public ResponseEntity<List<Quiz>> getAll(@PathVariable long id){
+        List<Quiz> quizzes = quizService.getAllQuizzes();
+        quizzes.removeIf(quiz -> quiz.getAuthor().getId()!=id);
+        return new ResponseEntity<>(quizzes, HttpStatus.OK);
     }
 
     @GetMapping("/all-quizzes")
