@@ -1,6 +1,7 @@
 package com.sda.controllers;
 
 import com.sda.exceptions.ResourceNotFoundException;
+import com.sda.model.quizzes.Question;
 import com.sda.model.quizzes.Quiz;
 import com.sda.model.users.Author;
 import com.sda.services.AuthorService;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -44,6 +46,12 @@ public class QuizController {
     @GetMapping("/{id}")
     public ResponseEntity<Quiz> getQuizById(@PathVariable long id){
             Quiz quiz = quizService.findQuizById(id);
+
+            //This is to shuffle the answers
+            List<Question> questionList= quiz.getQuestions();
+        for (Question q :questionList) {
+            Collections.shuffle(q.getAnswers());
+        }
             return new ResponseEntity<>(quiz, HttpStatus.OK);
     }
 
@@ -51,6 +59,7 @@ public class QuizController {
     public ResponseEntity<List<Quiz>> getAll(@PathVariable long id){
         List<Quiz> quizzes = quizService.getAllQuizzes();
         quizzes.removeIf(quiz -> quiz.getAuthor().getId()!=id);
+
         return new ResponseEntity<>(quizzes, HttpStatus.OK);
     }
 
