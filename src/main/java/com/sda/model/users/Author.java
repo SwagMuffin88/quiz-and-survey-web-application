@@ -1,9 +1,11 @@
 package com.sda.model.users;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sda.model.quizzes.Quiz;
 import lombok.*;
 import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,13 +15,17 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.List;
 
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
 @Entity @Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class Author
-//        implements UserDetails
+        implements UserDetails
 {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -46,32 +52,32 @@ public class Author
     @NotBlank(message = "Email cannot be empty!")
     private String email;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate dateOfBirth;
+//    @JsonFormat(pattern = "dd/MM/yyyy")
+//    private LocalDate dateOfBirth;
 
     @Column(columnDefinition="tinyint(1) default 1")
     private boolean isAvailable;
 
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return null;
-//    }
-//    @Override
-//    public boolean isAccountNonExpired() {
-//        return true;
-//    }
-//    @Override
-//    public boolean isAccountNonLocked() {
-//        return true;
-//    }
-//    @Override
-//    public boolean isCredentialsNonExpired() {
-//        return true;
-//    }
-//    @Override
-//    public boolean isEnabled() {
-//        // Could be used instead of variable isAvailable?
-//        return true;
-//    }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+    @Override
+    public boolean isEnabled() {
+        // Could be used instead of variable isAvailable?
+        return true;
+    }
 
 }

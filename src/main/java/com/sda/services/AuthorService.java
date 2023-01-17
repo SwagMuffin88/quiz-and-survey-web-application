@@ -47,7 +47,7 @@ public class AuthorService {
         authorToUpdate.setPassword(author.getPassword());
         authorToUpdate.setUsername(author.getUsername());
         authorToUpdate.setAvailable(true);
-        authorToUpdate.setDateOfBirth(author.getDateOfBirth());
+//        authorToUpdate.setDateOfBirth(author.getDateOfBirth());
         authorRepository.saveAndFlush(authorToUpdate);
         return new ResponseEntity<Author>(authorToUpdate, HttpStatus.OK);
 

@@ -9,6 +9,7 @@ import com.sda.model.users.Author;
 import com.sda.repositories.AuthorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,7 +33,7 @@ public class AuthenticationService {
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .email(request.getEmail())
-                .dateOfBirth(request.getDateOfBirth())
+//                .dateOfBirth(request.getDateOfBirth())
                 .build();
         authorRepository.save(author);
         var jwtToken = jwtService.generateToken(author);
@@ -42,9 +43,10 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                request.getUsername(), request.getPassword()
-        )); // In case the username or password are not correct, an exception will be thrown.
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                request.getUsername(), request.getPassword()));
+
+         // In case the username or password are not correct, an exception will be thrown.
         // ***
         // If we get to this point, we know the user has been authenticated. (Correct)
         // Now we need to generate a token and send it back.
