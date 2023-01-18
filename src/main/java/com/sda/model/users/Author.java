@@ -1,9 +1,11 @@
 package com.sda.model.users;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sda.model.quizzes.Quiz;
 import lombok.*;
 import org.springframework.boot.context.properties.bind.DefaultValue;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,42 +15,47 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.List;
 
-@Entity @Data @NoArgsConstructor
-public class Author implements UserDetails {
+import static java.time.format.DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
+@Entity @Data @NoArgsConstructor @AllArgsConstructor @Builder
+public class Author
+        implements UserDetails
+{
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotBlank(message = "Firstname cannot be empty!")
-    @Pattern(regexp = ("\\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+"),message = "Please make sure that the name format is correct and that the first letter is Uppercase")
+    @NotBlank(message = "First name cannot be empty!")
+    @Pattern(regexp = ("\\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+"),
+            message = "The name can only contain letters and the first letter must be uppercase")
     private String firstName;
 
-    @NotBlank(message = "Lastname cannot be empty!")
-    @Pattern(regexp = ("\\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+"),message = "Please make sure that the name format is correct and that the first letter is Uppercase")
+    @NotBlank(message = "Last name cannot be empty!")
+    @Pattern(regexp = ("\\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+"),
+            message = "The name can only contain letters and the first letter must be uppercase")
     private String lastName;
 
     @NotBlank(message = "Username cannot be empty!")
+    //Make sure username is unique
     private String username;
+
     @Size(min=5 , message = "The password must have at least 5 characters")
     @NotBlank(message = "Password cannot be empty!")
-
     private String password;
 
     @Email(message = "Invalid email")
     @NotBlank(message = "Email cannot be empty!")
     private String email;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate dateOfBirth;
-//
-//    @OneToMany
-//    List<Quiz> quizzes;
+//    @JsonFormat(pattern = "dd/MM/yyyy")
+//    private LocalDate dateOfBirth;
 
     @Column(columnDefinition="tinyint(1) default 1")
-//    @Column(columnDefinition = "boolean default true")
     private boolean isAvailable;
 
     @Override

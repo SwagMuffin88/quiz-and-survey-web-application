@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface AuthorRepository extends JpaRepository<Author, Long> {
 
     Optional<Author> findByEmail(String email);
-    Author findByUsername(String username);
+    Optional<Author> findByUsername(String username);
 
 //    @Query("select a from Author a where a.isAvailable = true")
 //    Optional<List<Author>> findAuthorsByIsAvailableIsTrue();

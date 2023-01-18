@@ -26,6 +26,11 @@ public class AuthorService {
         return author.orElseThrow(()-> new ResourceNotFoundException("The user with the ID " + id + " not found "));
     }
 
+    public Author findUserByUserName(String username) {
+        return authorRepository.findByUsername(username).orElseThrow(() ->
+                new ResourceNotFoundException("User not found"));
+    }
+
     public void saveNewAuthor(Author author) {
         author.setPassword(passwordEncoder.encode(author.getPassword()));
         author.setAvailable(true);
@@ -42,7 +47,7 @@ public class AuthorService {
         authorToUpdate.setPassword(author.getPassword());
         authorToUpdate.setUsername(author.getUsername());
         authorToUpdate.setAvailable(true);
-        authorToUpdate.setDateOfBirth(author.getDateOfBirth());
+//        authorToUpdate.setDateOfBirth(author.getDateOfBirth());
         authorRepository.saveAndFlush(authorToUpdate);
         return new ResponseEntity<Author>(authorToUpdate, HttpStatus.OK);
 
@@ -60,15 +65,10 @@ public class AuthorService {
     // if author.isAvailable() = true {
     //  removedAuthors.add(author)...
 
-
-    //    public List<Author> getAvailableAuthors(){
-//        return authorRepository.findAuthorsByIsAvailableIsTrue().orElseThrow(() ->
-//                new ResourceNotFoundException("Available users not found"));
-//    }
-
     // Should be removed once project is finished
     public List<Author> getAllAuthors() {
         return authorRepository.findAll();
     }
+
 
 }

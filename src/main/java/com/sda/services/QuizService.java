@@ -69,9 +69,11 @@ public class QuizService {
         quizRepository.save(quiz);
     }
 
-    public void addQuizToAuthor(String username, String quizTitle) {
-        Author author = authorRepository.findByUsername(username);
-        Quiz quiz = quizRepository.findByQuizTitle(quizTitle);
+    public void addQuizToAuthor(String username, Long quizId) {
+        Author author = authorRepository.findByUsername(username).orElseThrow(() ->
+                new ResourceNotFoundException("Username not found")); // <- maybe by ID instead // todo
+        Quiz quiz = quizRepository.findById(quizId).orElseThrow(() ->
+                new ResourceNotFoundException("Quiz not found"));
 
     }
 
