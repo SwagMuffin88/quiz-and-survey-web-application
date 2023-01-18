@@ -10,7 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 @Data
-@AllArgsConstructor @Builder
+@AllArgsConstructor
 public class CustomUserDetails implements UserDetails {
     private Author author;
     @Override

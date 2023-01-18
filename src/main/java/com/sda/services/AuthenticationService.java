@@ -41,11 +41,9 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .build();
     }
-
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.getUsername(), request.getPassword()));
-
          // In case the username or password are not correct, an exception will be thrown.
         // ***
         // If we get to this point, we know the user has been authenticated. (Correct)
