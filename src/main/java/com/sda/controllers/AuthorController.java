@@ -31,11 +31,11 @@ public class AuthorController {
     }
     // **************** //
 
-    @PostMapping("/create")
-    public ResponseEntity<Author> createUser (@Valid @RequestBody Author author){
-        authorService.saveNewAuthor(author);
-        return new ResponseEntity<Author>(author, HttpStatus.CREATED);
-    }
+//    @PostMapping("/create")
+//    public ResponseEntity<Author> createUser (@Valid @RequestBody Author author){
+//        authorService.saveNewAuthor(author);
+//        return new ResponseEntity<Author>(author, HttpStatus.CREATED);
+//    }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Author> updateUser (@PathVariable Long id , @RequestBody Author author){
