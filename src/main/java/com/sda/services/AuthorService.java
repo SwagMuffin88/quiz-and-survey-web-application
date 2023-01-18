@@ -7,6 +7,7 @@ import com.sda.repositories.QuizRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +33,6 @@ public class AuthorService {
     }
 
     public void saveNewAuthor(Author author) {
-        author.setPassword(passwordEncoder.encode(author.getPassword()));
-        author.setAvailable(true);
         authorRepository.save(author);
     }
 
@@ -51,6 +50,9 @@ public class AuthorService {
         authorRepository.saveAndFlush(authorToUpdate);
         return new ResponseEntity<Author>(authorToUpdate, HttpStatus.OK);
 
+    }
+    public Author findAuthorByUserName(String username){
+        return authorRepository.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("unername not found"));
     }
 
     public void disableAuthor(long authorId) {

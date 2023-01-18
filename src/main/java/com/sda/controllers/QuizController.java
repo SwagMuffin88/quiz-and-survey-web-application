@@ -46,7 +46,6 @@ public class QuizController {
     @GetMapping("/{id}")
     public ResponseEntity<Quiz> getQuizById(@PathVariable long id){
             Quiz quiz = quizService.findQuizById(id);
-
             //This is to shuffle the answers
             List<Question> questionList= quiz.getQuestions();
         for (Question q :questionList) {
@@ -66,6 +65,7 @@ public class QuizController {
     @GetMapping("/all-quizzes")
     public ResponseEntity<List<Quiz>> getAll(){
         List<Quiz> quizzes = quizService.getAllQuizzes();
+
         return new ResponseEntity<>(quizzes, HttpStatus.OK);
     }
 
