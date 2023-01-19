@@ -23,7 +23,7 @@ public class QuizService {
     private final ParticipantRepository participantRepository;
 
 
-    public Quiz createQuiz(Quiz quiz ,long authorId) {
+    public Quiz createQuizAndAddAuthor(Quiz quiz , long authorId) {
         Author author = authorRepository.findById(authorId).orElseThrow(() -> new ResourceNotFoundException("Author not found"));
         List<Question> quizQuestions = new ArrayList<>();
         for (Question question : quiz.getQuestions()) {
@@ -69,6 +69,8 @@ public class QuizService {
         quizRepository.save(quiz);
     }
 
+
+    // Unused method
     public void addQuizToAuthor(String username, Long quizId) {
         Author author = authorRepository.findByUsername(username).orElseThrow(() ->
                 new ResourceNotFoundException("Username not found")); // <- maybe by ID instead // todo
@@ -86,17 +88,10 @@ public class QuizService {
     public void disableQuiz(long quizId) {
         Quiz quiz = findQuizById(quizId);
         quiz.setAvailable(!quiz.isAvailable());
+
     }
 
-    public List<Quiz> getAllQuizzes(){
+    public List<Quiz> getAllQuizzes() {
         return quizRepository.findAll();
-//        List<Quiz> availbleA = new ArrayList<>();
-//        List<Quiz> quizzes= quizRepository.findAll();
-//        for (Quiz q:quizzes ) {
-//            if(q.isAvailable()){
-//                availbleA.add(q);
-//            }
-//        }
-//        return availbleA;
     }
 }

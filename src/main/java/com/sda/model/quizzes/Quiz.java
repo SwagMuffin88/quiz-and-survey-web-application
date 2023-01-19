@@ -15,7 +15,7 @@ public class Quiz {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long quizId;
 
-//    @NotBlank(message = "Please add a quiz title")
+    @NotBlank(message = "Please add a quiz title")
     private String quizTitle;
     @NotBlank(message = "Please add a quiz description")
     private String quizDescription;

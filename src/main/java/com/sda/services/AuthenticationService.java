@@ -9,14 +9,9 @@ import com.sda.model.users.Author;
 import com.sda.repositories.AuthorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service @RequiredArgsConstructor
 public class AuthenticationService {
@@ -33,7 +28,8 @@ public class AuthenticationService {
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .email(request.getEmail())
-//                .dateOfBirth(request.getDateOfBirth())
+                .dateOfBirth(request.getDateOfBirth())
+                .isAvailable(true)
                 .build();
         authorRepository.save(author);
         var jwtToken = jwtService.generateToken(author);

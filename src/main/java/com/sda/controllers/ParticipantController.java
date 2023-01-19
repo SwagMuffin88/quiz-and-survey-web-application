@@ -32,6 +32,6 @@ public class ParticipantController {
     public ResponseEntity<Participant> createParticipantAndAddToQuiz(
             @RequestBody Participant participant, @PathVariable long quizId) {
         participantService.addParticipantToQuiz(quizId, participant);
-        return null;
+        return new ResponseEntity<>(participant, HttpStatus.OK);
     }
 }
