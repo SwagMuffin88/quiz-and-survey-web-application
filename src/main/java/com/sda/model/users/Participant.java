@@ -16,7 +16,7 @@ import javax.validation.constraints.NotBlank;
 public class Participant {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long participantId;
+    private Long id;
     @NotBlank
     private String firstName;
     @NotBlank

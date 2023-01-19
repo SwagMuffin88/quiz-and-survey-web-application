@@ -20,7 +20,7 @@ public class QuizController {
     @Autowired
     QuizService quizService;
 
-    @PostMapping("/create/{userId}")
+    @PostMapping("/create/{userId}") // Password protected
     public ResponseEntity<Quiz> createQuizForAuthor(@PathVariable Long userId, @RequestBody Quiz quiz) {
         // Create quiz entity
         Quiz newQuiz = quizService.createQuizAndAddAuthor(quiz ,userId);  // Method assigns author to quiz
@@ -29,24 +29,19 @@ public class QuizController {
         return new ResponseEntity<Quiz>(newQuiz, HttpStatus.CREATED);
     }
 
-    @PutMapping("/edit/{id}")
-    public ResponseEntity<Quiz> editQuizById(@PathVariable long id, @RequestBody Quiz quiz) {
-        if (quiz.getParticipantList().size() == 0) {
+    @PutMapping("/edit/{id}") // Password protected
+    public ResponseEntity<Quiz> editQuizById(@PathVariable long id, @RequestBody Quiz quiz) throws Exception {
             Quiz updatedQuiz = quizService.editQuiz(id, quiz);
             return new ResponseEntity<>(updatedQuiz, HttpStatus.OK);
-        } else { // If quiz has participants already, it cannot be modified.
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
     }
 
-    @PutMapping("/remove/{id}")
+    @PutMapping("/remove/{id}") // Password protected
     public ResponseEntity<String> removeQuizById(@PathVariable long id) {
         quizService.disableQuiz(id);
-        // What will happen to the list of participants?
         return new ResponseEntity<String>("The quiz with ID " + id + " is removed", HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id}") // Accessible to all
     public ResponseEntity<Quiz> getQuizById(@PathVariable long id){
         Quiz quiz = quizService.findQuizById(id);
         //This is to shuffle the answers
@@ -57,14 +52,14 @@ public class QuizController {
         return new ResponseEntity<>(quiz, HttpStatus.OK);
     }
 
-    @GetMapping("/userQuizzes/{userId}")
+    @GetMapping("/userQuizzes/{userId}") // Password protected
     public ResponseEntity<List<Quiz>> getAllUserQuizzes(@PathVariable long userId){
         List<Quiz> quizzes = quizService.getAllQuizzes();
         quizzes.removeIf(quiz -> quiz.getAuthor().getId()!= userId);
         return new ResponseEntity<>(quizzes, HttpStatus.OK);
     }
 
-    @GetMapping("/all-quizzes")
+    @GetMapping("/all-quizzes") // Should be accessible to all
     public ResponseEntity<List<Quiz>> getAll(){
         List<Quiz> quizzes = quizService.getAllQuizzes();
         // Filter quizzes by availability

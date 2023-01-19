@@ -56,13 +56,16 @@ public class QuizService {
                 () -> new ResourceNotFoundException("Quiz not found"));
     }
 
-    public Quiz editQuiz(long quizId, Quiz quiz) {
+    public Quiz editQuiz(long quizId, Quiz quiz) throws Exception {
         Quiz quizToUpdate = findQuizById(quizId);
-        quizToUpdate.setQuizTitle(quiz.getQuizTitle());
-        quizToUpdate.setQuizDescription(quiz.getQuizDescription());
-        quizToUpdate.setPublic(quiz.isPublic());
-        saveQuiz(quizToUpdate);
-        return quizToUpdate;
+        if (quizToUpdate.getParticipantList().size() == 0) {
+            quizToUpdate.setQuizTitle(quiz.getQuizTitle());
+            quizToUpdate.setQuizDescription(quiz.getQuizDescription());
+            quizToUpdate.setPublic(quiz.isPublic());
+            saveQuiz(quizToUpdate);
+            return quizToUpdate;
+        }
+        else throw new Exception("Cannot modify a quiz if it has participants!");
     }
 
     public void saveQuiz (Quiz quiz) {
@@ -71,13 +74,13 @@ public class QuizService {
 
 
     // Unused method
-    public void addQuizToAuthor(String username, Long quizId) {
-        Author author = authorRepository.findByUsername(username).orElseThrow(() ->
-                new ResourceNotFoundException("Username not found")); // <- maybe by ID instead // todo
-        Quiz quiz = quizRepository.findById(quizId).orElseThrow(() ->
-                new ResourceNotFoundException("Quiz not found"));
-
-    }
+//    public void addQuizToAuthor(String username, Long quizId) {
+//        Author author = authorRepository.findByUsername(username).orElseThrow(() ->
+//                new ResourceNotFoundException("Username not found")); // <- maybe by ID instead // todo
+//        Quiz quiz = quizRepository.findById(quizId).orElseThrow(() ->
+//                new ResourceNotFoundException("Quiz not found"));
+//
+//    }
 
     public List<Participant> getAllParticipantsByQuizId(long quizId) {
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(() ->

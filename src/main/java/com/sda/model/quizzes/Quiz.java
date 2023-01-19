@@ -13,7 +13,7 @@ public class Quiz {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long quizId;
+    private Long id;
 
     @NotBlank(message = "Please add a quiz title")
     private String quizTitle;

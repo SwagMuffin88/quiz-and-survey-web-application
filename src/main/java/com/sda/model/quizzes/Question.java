@@ -10,7 +10,7 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long questionId;
+    private Long id;
 
 //    @NotBlank(message = "Please write a question")
     private String questionStatement;

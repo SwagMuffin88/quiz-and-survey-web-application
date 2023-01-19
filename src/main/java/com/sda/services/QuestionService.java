@@ -10,6 +10,7 @@ import com.sda.repositories.QuestionRepository;
 import com.sda.repositories.QuizRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PutMapping;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -22,19 +23,42 @@ public class QuestionService {
     private final QuizService quizService;
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
+    private final AnswerService answerService;
+
+
+    public Question createQuestion(Question question) {
+        List<Answer> answersList = new ArrayList<>();
+        Question newQuestion = new Question();
+        newQuestion.setQuestionStatement(question.getQuestionStatement());
+        for (Answer a : question.getAnswers()) {
+            a.setAvailable(true);
+            answerRepository.save(a);
+            answersList.add(a);
+        }
+        newQuestion.setAnswers(answersList);
+        newQuestion.setCorrectAnswer(question.getAnswers().get(0));
+        newQuestion.setAvailable(true);
+        questionRepository.save(newQuestion);
+
+        return newQuestion;
+    }
+
+    public Question findQuestionById(long questionId) {
+        return questionRepository.findById(questionId)
+                .orElseThrow(() -> new ResourceNotFoundException("Question not found"));
+    }
 
     public Question editQuestion(long questionId, Question question) {
         Question questionToUpdate = findQuestionById(questionId);
         questionToUpdate.setQuestionStatement(question.getQuestionStatement());
-        questionToUpdate.setCorrectAnswer(question.getCorrectAnswer());
-
+        questionToUpdate.setAnswers(question.getAnswers());
+        for (Answer a : questionToUpdate.getAnswers()) {
+            a.setAvailable(true);
+            answerRepository.saveAndFlush(a);
+        }
+        questionToUpdate.setCorrectAnswer(questionToUpdate.getAnswers().get(0));
         saveQuestion(questionToUpdate);
         return questionToUpdate;
-    }
-
-    private Question findQuestionById(long questionId) {
-        return questionRepository.findById(questionId)
-                .orElseThrow(() -> new ResourceNotFoundException("Question not found"));
     }
 
     public void saveQuestion(Question question) {
@@ -47,31 +71,19 @@ public class QuestionService {
         quiz.getQuestions().add(question);
         quizService.saveQuiz(quiz);
     }
-
     public void disableQuestion(long questionId) {
         Question question = findQuestionById(questionId);
         question.setAvailable(!question.isAvailable());
-    }
-
-    public Question createQuestion(Question question) {
-        List<Answer> answersList = new ArrayList<>();
-        Question newQuestion = new Question();
-        newQuestion.setQuestionStatement(question.getQuestionStatement());
         for (Answer a : question.getAnswers()) {
-            answerRepository.save(a);
-            answersList.add(a);
+            a.setAvailable(false);
+            answerRepository.saveAndFlush(a);
         }
-        newQuestion.setAnswers(answersList);
-        newQuestion.setCorrectAnswer(question.getAnswers().get(0));
-        newQuestion.setAvailable(true);
-        questionRepository.save(newQuestion);
-
-        return newQuestion;
+        saveQuestion(question);
     }
 
-    public Question changeWQuestionStatusToUnavailable (long id){
-       Question question = findQuestionById(id);
-       question.setAvailable(false);
-       return questionRepository.save(question);
-    }
+//    public void changeQuestionStatusToUnavailable(long id){
+//       Question question = findQuestionById(id);
+//       question.setAvailable(false);
+//       questionRepository.save(question);
+//    }
 }

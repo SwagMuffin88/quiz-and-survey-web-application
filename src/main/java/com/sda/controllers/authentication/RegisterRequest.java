@@ -20,12 +20,12 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class RegisterRequest {
 
-    @NotBlank(message = "Firstname cannot be empty!")
+    @NotBlank(message = "First name cannot be empty!")
     @Pattern(regexp = ("\\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+"),
             message = "The name can only contain letters and the first letter must be uppercase")
     private String firstName;
 
-    @NotBlank(message = "Lastname cannot be empty!")
+    @NotBlank(message = "Last name cannot be empty!")
     @Pattern(regexp = ("\\b([A-ZÀ-ÿ][-,a-z. ']+[ ]*)+"),
             message = "The name can only contain letters and the first letter must be uppercase")
     private String lastName;
