@@ -41,18 +41,21 @@ public class AuthorService {
         // Ideally, disabled users should not be modifiable.
         Author authorToUpdate = authorRepository.findById(id).orElseThrow(
                 ()-> new ResourceNotFoundException("The user with the ID "+id+" not found "));
-        authorToUpdate.setLastName(author.getLastName());
         authorToUpdate.setFirstName(author.getFirstName());
-        authorToUpdate.setPassword(author.getPassword());
+        authorToUpdate.setLastName(author.getLastName());
         authorToUpdate.setUsername(author.getUsername());
+        authorToUpdate.setPassword(author.getPassword());
+        authorToUpdate.setEmail(author.getEmail());
         authorToUpdate.setAvailable(true);
-//        authorToUpdate.setDateOfBirth(author.getDateOfBirth());
+        authorToUpdate.setDateOfBirth(author.getDateOfBirth());
         authorRepository.saveAndFlush(authorToUpdate);
         return new ResponseEntity<Author>(authorToUpdate, HttpStatus.OK);
-
     }
+
+    //Unused method
     public Author findAuthorByUserName(String username){
-        return authorRepository.findByUsername(username).orElseThrow(()-> new UsernameNotFoundException("unername not found"));
+        return authorRepository.findByUsername(username)
+                .orElseThrow(()-> new UsernameNotFoundException("username not found"));
     }
 
     public void disableAuthor(long authorId) {
@@ -60,14 +63,7 @@ public class AuthorService {
         author.setAvailable(!author.isAvailable());
     }
 
-    // Method for recovering account
-    // Look for specific user in database, set availability to true
-//     List<Author> removedAuthors = new ArrayList<>();
-    // Author author = authorRepository.findAll()
-    // if author.isAvailable() = true {
-    //  removedAuthors.add(author)...
-
-    // Should be removed once project is finished
+    // todo Should be removed once project is finished
     public List<Author> getAllAuthors() {
         return authorRepository.findAll();
     }
