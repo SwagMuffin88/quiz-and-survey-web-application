@@ -29,13 +29,13 @@ public class QuizController {
         return new ResponseEntity<Quiz>(newQuiz, HttpStatus.CREATED);
     }
 
-    @PutMapping("/edit/{id}") // Password protected
+    @PutMapping("/{id}/edit") // Password protected
     public ResponseEntity<Quiz> editQuizById(@PathVariable long id, @RequestBody Quiz quiz) throws Exception {
             Quiz updatedQuiz = quizService.editQuiz(id, quiz);
             return new ResponseEntity<>(updatedQuiz, HttpStatus.OK);
     }
 
-    @PutMapping("/remove/{id}") // Password protected
+    @PutMapping("/{id}/remove") // Password protected
     public ResponseEntity<String> removeQuizById(@PathVariable long id) {
         quizService.disableQuiz(id);
         return new ResponseEntity<String>("The quiz with ID " + id + " is removed", HttpStatus.NO_CONTENT);

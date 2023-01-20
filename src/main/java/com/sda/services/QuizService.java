@@ -20,8 +20,7 @@ public class QuizService {
     private final QuizRepository quizRepository;
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
-    private final ParticipantRepository participantRepository;
-
+//    private final ParticipantRepository participantRepository;
 
     public Quiz createQuizAndAddAuthor(Quiz quiz , long authorId) {
         Author author = authorRepository.findById(authorId).orElseThrow(() -> new ResourceNotFoundException("Author not found"));
@@ -71,16 +70,6 @@ public class QuizService {
     public void saveQuiz (Quiz quiz) {
         quizRepository.save(quiz);
     }
-
-
-    // Unused method
-//    public void addQuizToAuthor(String username, Long quizId) {
-//        Author author = authorRepository.findByUsername(username).orElseThrow(() ->
-//                new ResourceNotFoundException("Username not found")); // <- maybe by ID instead // todo
-//        Quiz quiz = quizRepository.findById(quizId).orElseThrow(() ->
-//                new ResourceNotFoundException("Quiz not found"));
-//
-//    }
 
     public List<Participant> getAllParticipantsByQuizId(long quizId) {
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(() ->

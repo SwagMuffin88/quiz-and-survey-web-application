@@ -23,7 +23,6 @@ public class QuestionService {
     private final QuizService quizService;
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
-    private final AnswerService answerService;
 
 
     public Question createQuestion(Question question) {
@@ -51,7 +50,7 @@ public class QuestionService {
     public Question editQuestion(long questionId, Question question) {
         Question questionToUpdate = findQuestionById(questionId);
         questionToUpdate.setQuestionStatement(question.getQuestionStatement());
-        questionToUpdate.setAnswers(question.getAnswers());
+//        questionToUpdate.setAnswers(question.getAnswers());
         for (Answer a : questionToUpdate.getAnswers()) {
             a.setAvailable(true);
             answerRepository.saveAndFlush(a);

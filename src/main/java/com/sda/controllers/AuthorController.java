@@ -8,8 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/user")
 public class AuthorController {
@@ -17,14 +15,6 @@ public class AuthorController {
     private AuthorService authorService;
     @Autowired
     private QuizService quizService;
-
-    //** Not for API ***
-    @GetMapping("/hello")
-    @ResponseBody
-    public String greet() {
-        return "Welcome user";
-    }
-    // **************** //
 
     @GetMapping("/{id}")
     public ResponseEntity<Author> getUserById (@PathVariable Long id ){
@@ -45,8 +35,16 @@ public class AuthorController {
 
     // For endpoint testing:
     // Should be excluded once project is finished
-    @GetMapping("/view-users")
-    public ResponseEntity<List<Author>> getAuthors(){
-            return ResponseEntity.ok().body(authorService.getAllAuthors());
-    }
+//    @GetMapping("/view-users")
+//    public ResponseEntity<List<Author>> getAuthors(){
+//            return ResponseEntity.ok().body(authorService.getAllAuthors());
+//    }
+    //** Not for API ***
+//    @GetMapping("/hello")
+//    @ResponseBody
+//    public String greet() {
+//        return "Welcome user";
+//    }
+    // **************** //
+
 }

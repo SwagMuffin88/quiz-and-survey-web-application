@@ -8,15 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping("/participant")
 public class ParticipantController {
-
     @Autowired
     private ParticipantService participantService;
-
     @Autowired
     private QuizService quizService;
 
@@ -30,7 +29,7 @@ public class ParticipantController {
     @PostMapping("/create/{quizId}")
     // Creates and adds a participant to a quiz
     public ResponseEntity<Participant> createParticipantAndAddToQuiz(
-            @RequestBody Participant participant, @PathVariable long quizId) {
+            @RequestBody @Valid Participant participant, @PathVariable long quizId) {
         participantService.addParticipantToQuiz(quizId, participant);
         return new ResponseEntity<>(participant, HttpStatus.OK);
     }

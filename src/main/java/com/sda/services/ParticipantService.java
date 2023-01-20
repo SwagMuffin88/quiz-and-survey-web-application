@@ -14,15 +14,13 @@ import java.util.List;
 
 @Service @RequiredArgsConstructor @Transactional
 public class ParticipantService {
-    private final AuthorRepository authorRepository;
     private final QuizRepository quizRepository;
     private final ParticipantRepository participantRepository;
-
     private final QuizService quizService;
 
-    public List<Participant> getAllParticipants() {
-        return participantRepository.findAll();
-    }
+//    public List<Participant> getAllParticipants() {
+//        return participantRepository.findAll();
+//    }
 
     public Participant createParticipant(Participant participant) {
         return participantRepository.save(participant);
