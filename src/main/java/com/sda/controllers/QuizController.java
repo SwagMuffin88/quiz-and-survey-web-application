@@ -22,6 +22,7 @@ public class QuizController {
 
     @PostMapping("/create/{userId}") // Password protected
     public ResponseEntity<Quiz> createQuizForAuthor(@PathVariable Long userId, @RequestBody Quiz quiz) {
+        System.out.println(quiz.isPublic());
         // Create quiz entity
         Quiz newQuiz = quizService.createQuizAndAddAuthor(quiz ,userId);  // Method assigns author to quiz
         //Save the quiz entity
@@ -67,6 +68,7 @@ public class QuizController {
         for (Quiz q : quizzes) {
             if (q.isAvailable()) availableQuizzes.add(q);
         }
+        availableQuizzes.removeIf(quiz -> !quiz.isPublic());
         return new ResponseEntity<>(availableQuizzes, HttpStatus.OK);
     }
 

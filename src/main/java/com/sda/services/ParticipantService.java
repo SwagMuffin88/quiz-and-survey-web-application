@@ -23,12 +23,13 @@ public class ParticipantService {
         return participantRepository.save(participant);
     }
 
-    public void addParticipantToQuiz(long quizId, Participant participant) {
+    public Participant addParticipantToQuiz(long quizId, Participant participant) {
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(() ->
                 new ResourceNotFoundException("Quiz not found"));
         Participant newParticipant = createParticipant(participant);
-        if (participant != null) quiz.getParticipantList().add(newParticipant);
+        quiz.getParticipantList().add(newParticipant);
         quizService.saveQuiz(quiz);
+        return newParticipant;
     }
 
 }
