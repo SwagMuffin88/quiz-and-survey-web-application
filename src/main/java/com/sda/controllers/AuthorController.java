@@ -33,18 +33,4 @@ public class AuthorController {
         return new ResponseEntity<String>("The author with ID " + id + " is removed", HttpStatus.NO_CONTENT);
     }
 
-    // For endpoint testing:
-    // Should be excluded once project is finished
-//    @GetMapping("/view-users")
-//    public ResponseEntity<List<Author>> getAuthors(){
-//            return ResponseEntity.ok().body(authorService.getAllAuthors());
-//    }
-    //** Not for API ***
-//    @GetMapping("/hello")
-//    @ResponseBody
-//    public String greet() {
-//        return "Welcome user";
-//    }
-    // **************** //
-
 }

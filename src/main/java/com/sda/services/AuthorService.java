@@ -32,10 +32,6 @@ public class AuthorService {
                 new ResourceNotFoundException("User not found"));
     }
 
-    public void saveNewAuthor(Author author) {
-        authorRepository.save(author);
-    }
-
     public ResponseEntity<Author> updateAuthor( Long id, Author author) {
         // Finds and updates author entity regardless of availability
         // Ideally, disabled users should not be modifiable.
@@ -52,21 +48,9 @@ public class AuthorService {
         return new ResponseEntity<Author>(authorToUpdate, HttpStatus.OK);
     }
 
-    //Unused method
-    public Author findAuthorByUserName(String username){
-        return authorRepository.findByUsername(username)
-                .orElseThrow(()-> new UsernameNotFoundException("username not found"));
-    }
-
     public void disableAuthor(long authorId) {
         Author author = findAuthorById(authorId);
         author.setAvailable(!author.isAvailable());
     }
-
-    // todo Should be removed once project is finished
-    public List<Author> getAllAuthors() {
-        return authorRepository.findAll();
-    }
-
 
 }

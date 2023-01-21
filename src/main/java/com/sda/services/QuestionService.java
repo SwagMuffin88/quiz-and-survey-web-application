@@ -79,10 +79,4 @@ public class QuestionService {
         }
         saveQuestion(question);
     }
-
-//    public void changeQuestionStatusToUnavailable(long id){
-//       Question question = findQuestionById(id);
-//       question.setAvailable(false);
-//       questionRepository.save(question);
-//    }
 }

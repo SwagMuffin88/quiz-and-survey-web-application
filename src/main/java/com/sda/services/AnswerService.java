@@ -44,7 +44,6 @@ public class AnswerService {
         return answerRepository.findById(answerId).orElseThrow(() ->
                 new ResourceNotFoundException("Answer not found"));
     }
-
     public void addAnswerToQuestion(long questionId, Answer answer) {
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Question not found"));
