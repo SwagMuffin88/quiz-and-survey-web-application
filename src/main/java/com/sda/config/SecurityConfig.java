@@ -31,6 +31,11 @@ public class SecurityConfig {
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .logout()
+                .logoutUrl("/perform-logout")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .and()
                 .build();
     }
 
