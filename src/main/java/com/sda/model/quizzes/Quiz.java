@@ -26,8 +26,14 @@ public class Quiz {
     @OneToMany (cascade = CascadeType.ALL)
     private List<Participant> participantList;
 
+    @ManyToMany (cascade = CascadeType.ALL)
+    private List<Tag> tagList;
+
     @OneToOne(cascade = CascadeType.MERGE)
     private Author author;
+
+    @NotBlank(message = "Please choose a category")
+    private String category;
 
 //    @Column(columnDefinition="tinyint(1) default 1")
     private boolean isAvailable;
