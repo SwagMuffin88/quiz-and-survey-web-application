@@ -25,6 +25,7 @@ public class QuizService {
     public Quiz createQuizAndAddAuthor(Quiz quiz , long authorId) {
         Author author = authorRepository.findById(authorId).orElseThrow(() -> new ResourceNotFoundException("Author not found"));
         List<Question> quizQuestions = new ArrayList<>();
+
         for (Question question : quiz.getQuestions()) {
             List<Answer> answersList = new ArrayList<>();
             Question newQuestion = new Question();
@@ -40,11 +41,15 @@ public class QuizService {
             questionRepository.save(newQuestion);
             quizQuestions.add(newQuestion);
         }
+        List<String> quizTagList = new ArrayList<>(quiz.getTagList());
+
         Quiz newQuiz = new Quiz();
         newQuiz.setAuthor(author);
+        newQuiz.setCategory(quiz.getCategory());
         newQuiz.setQuizTitle(quiz.getQuizTitle());
         newQuiz.setQuizDescription(quiz.getQuizDescription());
         newQuiz.setQuestions(quizQuestions);
+        newQuiz.setTagList(quizTagList);
         newQuiz.setPublic(quiz.isPublic());
         newQuiz.setAvailable(true);
         return newQuiz;
@@ -60,6 +65,7 @@ public class QuizService {
         if (quizToUpdate.getParticipantList().size() == 0) {
             quizToUpdate.setQuizTitle(quiz.getQuizTitle());
             quizToUpdate.setQuizDescription(quiz.getQuizDescription());
+            quizToUpdate.setCategory(quiz.getCategory());
             quizToUpdate.setPublic(quiz.isPublic());
             saveQuiz(quizToUpdate);
             return quizToUpdate;

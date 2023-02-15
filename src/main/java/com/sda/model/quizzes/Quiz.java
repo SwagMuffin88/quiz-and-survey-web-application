@@ -26,8 +26,8 @@ public class Quiz {
     @OneToMany (cascade = CascadeType.ALL)
     private List<Participant> participantList;
 
-    @ManyToMany (cascade = CascadeType.ALL)
-    private List<Tag> tagList;
+    @ElementCollection
+    private List<String> tagList;
 
     @OneToOne(cascade = CascadeType.MERGE)
     private Author author;
