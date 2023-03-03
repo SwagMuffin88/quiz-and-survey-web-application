@@ -10,7 +10,6 @@ import com.sda.repositories.QuestionRepository;
 import com.sda.repositories.QuizRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PutMapping;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -24,22 +23,20 @@ public class QuestionService {
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
 
-
-    public Question createQuestion(Question question) {
-        List<Answer> answersList = new ArrayList<>();
+    public Question createQuestion (Question q){
         Question newQuestion = new Question();
-        newQuestion.setQuestionStatement(question.getQuestionStatement());
-        for (Answer a : question.getAnswers()) {
+        newQuestion.setStatement(q.getStatement());
+        newQuestion.setAvailable(true);
+        newQuestion.setCorrectAnswer(q.getCorrectAnswer());
+        answerRepository.save(q.getCorrectAnswer());
+        List<Answer> answers = new ArrayList<>();
+        for (Answer a : q.getAnswers() ) {
             a.setAvailable(true);
             answerRepository.save(a);
-            answersList.add(a);
+            answers.add(a);
         }
-        newQuestion.setAnswers(answersList);
-        newQuestion.setCorrectAnswer(question.getAnswers().get(0));
-        newQuestion.setAvailable(true);
-        questionRepository.save(newQuestion);
-
-        return newQuestion;
+        newQuestion.setAnswers(answers);
+        return questionRepository.save(newQuestion);
     }
 
     public Question findQuestionById(long questionId) {
@@ -49,7 +46,7 @@ public class QuestionService {
 
     public Question editQuestion(long questionId, Question question) {
         Question questionToUpdate = findQuestionById(questionId);
-        questionToUpdate.setQuestionStatement(question.getQuestionStatement());
+        questionToUpdate.setStatement(question.getStatement());
 //        questionToUpdate.setAnswers(question.getAnswers());
         for (Answer a : questionToUpdate.getAnswers()) {
             a.setAvailable(true);

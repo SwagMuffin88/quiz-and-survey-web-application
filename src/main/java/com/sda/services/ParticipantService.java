@@ -18,7 +18,6 @@ public class ParticipantService {
     private final ParticipantRepository participantRepository;
     private final QuizService quizService;
 
-
     public Participant createParticipant(Participant participant) {
         return participantRepository.save(participant);
     }

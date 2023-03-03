@@ -52,11 +52,11 @@ public class Author
 //    @NotBlank(message = "Email cannot be empty!")
     private String email;
 
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
 
     @Column(columnDefinition = "tinyint(1) default 1")
-    private boolean isAvailable;
+    private boolean available;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -14,15 +14,13 @@ import javax.transaction.Transactional;
 
 @Service @RequiredArgsConstructor @Transactional
 public class AnswerService {
-    private final AuthorRepository authorRepository;
-    private final QuizRepository quizRepository;
     private final QuestionRepository questionRepository;
     private final AnswerRepository answerRepository;
     private final QuestionService questionService;
 
     public Answer editAnswer(long answerId, Answer answer) {
         Answer answerToUpdate = findAnswerById(answerId);
-        answerToUpdate.setAnswerStatement(answer.getAnswerStatement());
+        answerToUpdate.setStatement(answer.getStatement());
         answerToUpdate.setAvailable(true);
         saveAnswer(answerToUpdate);
         return answerToUpdate;
@@ -30,7 +28,7 @@ public class AnswerService {
 
     public Answer createAnswer(Answer answer) {
         Answer newAnswer = new Answer();
-        newAnswer.setAnswerStatement(answer.getAnswerStatement());
+        newAnswer.setStatement(answer.getStatement());
         newAnswer.setAvailable(true);
         answerRepository.save(newAnswer);
         return newAnswer;

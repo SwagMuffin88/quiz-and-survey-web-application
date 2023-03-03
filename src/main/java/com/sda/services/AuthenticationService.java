@@ -29,7 +29,7 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .email(request.getEmail())
                 .dateOfBirth(request.getDateOfBirth())
-                .isAvailable(true)
+                .available(true)
                 .build();
         authorRepository.save(author);
         var jwtToken = jwtService.generateToken(author);
