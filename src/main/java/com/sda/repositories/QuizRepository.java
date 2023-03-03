@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface QuizRepository extends JpaRepository<Quiz,Long> {
-    Quiz findByQuizTitle(String quizTitle);
+    Quiz findByTitle(String quizTitle);
 //    @Query("select q from Quiz q where q.isAvailable = true")
 //    List<Quiz> findQuizzesByIsAvailableIsTrue();
 //

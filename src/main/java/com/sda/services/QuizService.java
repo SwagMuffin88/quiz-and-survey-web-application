@@ -8,6 +8,8 @@ import com.sda.model.users.Author;
 import com.sda.model.users.Participant;
 import com.sda.repositories.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -18,40 +20,26 @@ import java.util.List;
 public class QuizService {
     private final AuthorRepository authorRepository;
     private final QuizRepository quizRepository;
-    private final QuestionRepository questionRepository;
-    private final AnswerRepository answerRepository;
-//    private final ParticipantRepository participantRepository;
+    @Autowired
+    @Lazy
+    private QuestionService questionService;
 
     public Quiz createQuizAndAddAuthor(Quiz quiz , long authorId) {
-        Author author = authorRepository.findById(authorId).orElseThrow(() -> new ResourceNotFoundException("Author not found"));
-        List<Question> quizQuestions = new ArrayList<>();
-
-        for (Question question : quiz.getQuestions()) {
-            List<Answer> answersList = new ArrayList<>();
-            Question newQuestion = new Question();
-            newQuestion.setQuestionStatement(question.getQuestionStatement());
-            for (Answer a : question.getAnswers()) {
-                a.setAvailable(true);
-                answerRepository.save(a);
-                answersList.add(a);
-            }
-            newQuestion.setAnswers(answersList);
-            newQuestion.setCorrectAnswer(question.getAnswers().get(0));
-            newQuestion.setAvailable(true);
-            questionRepository.save(newQuestion);
-            quizQuestions.add(newQuestion);
+        Author author = authorRepository.findById(authorId).orElseThrow(()-> new ResourceNotFoundException("Author not found"));
+        List<Question> questions = new ArrayList<>();
+        for (Question q : quiz.getQuestions()) {
+            Question newQuestion = questionService.createQuestion(q);
+            questions.add(newQuestion);
         }
-        List<String> quizTagList = new ArrayList<>(quiz.getTagList());
-
         Quiz newQuiz = new Quiz();
         newQuiz.setAuthor(author);
+        newQuiz.setAvailable(quiz.isAvailable());
+        newQuiz.setQuestions(questions);
+        newQuiz.setDescription(quiz.getDescription());
         newQuiz.setCategory(quiz.getCategory());
-        newQuiz.setQuizTitle(quiz.getQuizTitle());
-        newQuiz.setQuizDescription(quiz.getQuizDescription());
-        newQuiz.setQuestions(quizQuestions);
-        newQuiz.setTagList(quizTagList);
+        newQuiz.setTitle(quiz.getTitle());
         newQuiz.setPublic(quiz.isPublic());
-        newQuiz.setAvailable(true);
+        newQuiz.setTags(quiz.getTags());
         return newQuiz;
     }
 
@@ -63,8 +51,8 @@ public class QuizService {
     public Quiz editQuiz(long quizId, Quiz quiz) throws Exception {
         Quiz quizToUpdate = findQuizById(quizId);
         if (quizToUpdate.getParticipantList().size() == 0) {
-            quizToUpdate.setQuizTitle(quiz.getQuizTitle());
-            quizToUpdate.setQuizDescription(quiz.getQuizDescription());
+            quizToUpdate.setTitle(quiz.getTitle());
+            quizToUpdate.setDescription(quiz.getDescription());
             quizToUpdate.setCategory(quiz.getCategory());
             quizToUpdate.setPublic(quiz.isPublic());
             saveQuiz(quizToUpdate);

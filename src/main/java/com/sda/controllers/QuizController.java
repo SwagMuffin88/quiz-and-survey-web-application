@@ -15,12 +15,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/quiz")
 public class QuizController {
+//    @Autowired
+//    private AuthorService authorService;
     @Autowired
-    AuthorService authorService;
-    @Autowired
-    QuizService quizService;
+    private QuizService quizService;
 
-    @PostMapping("/create/{userId}") // Password protected
+    @PostMapping("/add/{userId}") // Password protected
     public ResponseEntity<Quiz> createQuizForAuthor(@PathVariable Long userId, @RequestBody Quiz quiz) {
         System.out.println(quiz.isPublic());
         // Create quiz entity
@@ -53,7 +53,7 @@ public class QuizController {
         return new ResponseEntity<>(quiz, HttpStatus.OK);
     }
 
-    @GetMapping("/userQuizzes/{userId}") // Password protected
+    @GetMapping("/user/{userId}") // Password protected
     public ResponseEntity<List<Quiz>> getAllUserQuizzes(@PathVariable long userId){
         List<Quiz> quizzes = quizService.getAllQuizzes();
         quizzes.removeIf(quiz -> quiz.getAuthor().getId()!= userId);

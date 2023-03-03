@@ -18,7 +18,7 @@ import java.util.Optional;
 @Service @RequiredArgsConstructor @Transactional
 public class AuthorService {
     private final AuthorRepository authorRepository;
-    private final QuizRepository quizRepository;
+//    private final QuizRepository quizRepository;
     private final PasswordEncoder passwordEncoder;
 
     public Author findAuthorById(Long id) {
@@ -32,7 +32,7 @@ public class AuthorService {
                 new ResourceNotFoundException("User not found"));
     }
 
-    public ResponseEntity<Author> updateAuthor( Long id, Author author) {
+    public ResponseEntity<Author> updateAuthor(Long id, Author author) {
         // Finds and updates author entity regardless of availability
         // Ideally, disabled users should not be modifiable.
         Author authorToUpdate = authorRepository.findById(id).orElseThrow(
@@ -40,7 +40,7 @@ public class AuthorService {
         authorToUpdate.setFirstName(author.getFirstName());
         authorToUpdate.setLastName(author.getLastName());
         authorToUpdate.setUsername(author.getUsername());
-        authorToUpdate.setPassword(author.getPassword());
+        authorToUpdate.setPassword(passwordEncoder.encode(author.getPassword()));
         authorToUpdate.setEmail(author.getEmail());
         authorToUpdate.setAvailable(true);
         authorToUpdate.setDateOfBirth(author.getDateOfBirth());

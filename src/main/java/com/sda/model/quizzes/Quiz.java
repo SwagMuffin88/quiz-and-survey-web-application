@@ -16,9 +16,9 @@ public class Quiz {
     private Long id;
 
     @NotBlank(message = "Please add a quiz title")
-    private String quizTitle;
+    private String title;
     @NotBlank(message = "Please add a quiz description")
-    private String quizDescription;
+    private String description;
 
     @OneToMany (cascade = CascadeType.ALL)
     private List<Question> questions;
@@ -27,7 +27,7 @@ public class Quiz {
     private List<Participant> participantList;
 
     @ElementCollection
-    private List<String> tagList;
+    private List<String> tags;
 
     @OneToOne(cascade = CascadeType.MERGE)
     private Author author;
@@ -36,7 +36,7 @@ public class Quiz {
     private String category;
 
 //    @Column(columnDefinition="tinyint(1) default 1")
-    private boolean isAvailable;
+    private boolean available;
 
     private boolean isPublic;
 

@@ -3,6 +3,7 @@ package com.sda.model.quizzes;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 @Entity @Data @NoArgsConstructor
@@ -12,8 +13,8 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-//    @NotBlank(message = "Please write a question")
-    private String questionStatement;
+    @NotBlank(message = "Please write a question")
+    private String statement;
 
     @OneToOne(cascade = CascadeType.MERGE)
     private Answer correctAnswer;
@@ -22,6 +23,6 @@ public class Question {
     private List<Answer> answers;
 
 //    @Column(columnDefinition="tinyint(1) default 1")
-    private boolean isAvailable;
+    private boolean available;
 
 }
