@@ -3,25 +3,19 @@ package com.sda.model.quizzes;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity @Data @NoArgsConstructor
 public class Answer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int answerId;
+    private Long id;
 
-//    @NotBlank(message = "Please write an answer")
-    private String answerStatement;
+    @NotBlank(message = "Please write an answer")
+    private String statement;
 
-    public Answer(String answerStatement) {
-        this.answerStatement = answerStatement;
-    }
+//    @Column(columnDefinition="tinyint(1) default 1")
+    private boolean available;
 
-    // ************
-    // Initial relationship, commented out for now
-//    @ManyToOne()
-//    @JoinColumn(name = "question_id")
-//    private Question question;
-    // ************
 }
