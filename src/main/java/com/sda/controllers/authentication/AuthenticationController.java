@@ -1,29 +1,44 @@
 package com.sda.controllers.authentication;
 
-import com.sda.services.AuthenticationService;
-import lombok.RequiredArgsConstructor;
+import com.sda.exception.ResourceNotFoundException;
+import com.sda.models.Author;
+import com.sda.services.AuthorService;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
-@RequiredArgsConstructor
+@CrossOrigin
 public class AuthenticationController {
-
-    private final AuthenticationService authenticationService;
+    @Autowired
+    private AuthorService authorService;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@Valid @RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(authenticationService.register(request));
+    public ResponseEntity<String> registerAuthor(@Valid @RequestBody Author author){
+        authorService.addAuthor(author);
+        return new ResponseEntity<String>("added", HttpStatus.CREATED);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-        return ResponseEntity.ok(authenticationService.authenticate(request));
+    public ResponseEntity<AuthenticationResponse> authenticateAuthor(@Valid @RequestBody AuthenticationRequest authenticationRequest ){
+        Authentication authentication= authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(),authenticationRequest.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        AuthenticationResponse authenticationResponse = authorService.getAuthenticationResponse(authenticationRequest.getUsername());
+        return new ResponseEntity<>(authenticationResponse,HttpStatus.OK);
     }
+    @GetMapping("/test")
+    public ResponseEntity<String> test(){
+
+        throw new ResourceNotFoundException("nod");
+    }
+
 }

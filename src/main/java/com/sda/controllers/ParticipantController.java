@@ -1,36 +1,25 @@
 package com.sda.controllers;
 
-import com.sda.model.users.Participant;
+import com.sda.models.Participant;
+import com.sda.models.Quiz;
 import com.sda.services.ParticipantService;
-import com.sda.services.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import java.util.List;
-
+@CrossOrigin
 @RestController
 @RequestMapping("/participant")
 public class ParticipantController {
     @Autowired
-    private ParticipantService participantService;
-    @Autowired
-    private QuizService quizService;
+    ParticipantService participantService;
 
-    @GetMapping("/{quizId}")
-    //returns a list of all participants associated with a single quiz
-    public ResponseEntity<List<Participant>> getParticipantByQuizId(@PathVariable long quizId) {
-        List<Participant> quizParticipants = quizService.getAllParticipantsByQuizId(quizId);
-        return new ResponseEntity<List<Participant>>(quizParticipants, HttpStatus.OK);
+    @PostMapping("/add/{id}")
+    public ResponseEntity<Quiz> saveParticipant(@PathVariable long id , @RequestBody Participant participant){
+        Quiz quiz = participantService.addParticipantToQuiz(participant,id);
+        return new ResponseEntity<>(quiz, HttpStatus.OK);
     }
 
-    @PostMapping("/create/{quizId}")
-    // Creates and adds a participant to a quiz
-    public ResponseEntity<Participant> createParticipantAndAddToQuiz(
-            @RequestBody @Valid Participant participant, @PathVariable long quizId) {
-        participantService.addParticipantToQuiz(quizId, participant);
-        return new ResponseEntity<>(participant, HttpStatus.OK);
-    }
+
 }

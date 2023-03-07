@@ -1,31 +1,33 @@
 package com.sda.services;
 
-import com.sda.exceptions.ResourceNotFoundException;
-import com.sda.model.quizzes.Answer;
-import com.sda.model.quizzes.Question;
-import com.sda.model.quizzes.Quiz;
-import com.sda.model.users.Author;
-import com.sda.model.users.Participant;
-import com.sda.repositories.*;
-import lombok.RequiredArgsConstructor;
+import com.sda.exception.ResourceNotFoundException;
+import com.sda.models.Author;
+import com.sda.models.Question;
+import com.sda.models.Quiz;
+import com.sda.repositories.AnswerRepository;
+import com.sda.repositories.AuthorRepository;
+import com.sda.repositories.QuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service @RequiredArgsConstructor @Transactional
+@Service
 public class QuizService {
-    private final AuthorRepository authorRepository;
-    private final QuizRepository quizRepository;
     @Autowired
-    @Lazy
+    private AuthorRepository authorRepository;
+    @Autowired
+    private QuizRepository quizRepository;
+    @Autowired
+    private AnswerRepository answerRepository;
+    @Autowired
     private QuestionService questionService;
 
-    public Quiz createQuizAndAddAuthor(Quiz quiz , long authorId) {
-        Author author = authorRepository.findById(authorId).orElseThrow(()-> new ResourceNotFoundException("Author not found"));
+
+    public Quiz createQuizAndAddAuthor(Quiz quiz , long authorId){
+        Author author = authorRepository.findById(authorId).orElseThrow(()-> new ResourceNotFoundException("Author no found"));
         List<Question> questions = new ArrayList<>();
         for (Question q : quiz.getQuestions()) {
             Question newQuestion = questionService.createQuestion(q);
@@ -42,42 +44,46 @@ public class QuizService {
         newQuiz.setTags(quiz.getTags());
         return newQuiz;
     }
-
-    public Quiz findQuizById(long quizId) {
-        return quizRepository.findById(quizId).orElseThrow(
-                () -> new ResourceNotFoundException("Quiz not found"));
+    public Quiz saveQuiz (Quiz quiz) {
+        return quizRepository.save(quiz);
     }
-
-    public Quiz editQuiz(long quizId, Quiz quiz) throws Exception {
-        Quiz quizToUpdate = findQuizById(quizId);
-        if (quizToUpdate.getParticipantList().size() == 0) {
-            quizToUpdate.setTitle(quiz.getTitle());
-            quizToUpdate.setDescription(quiz.getDescription());
-            quizToUpdate.setCategory(quiz.getCategory());
-            quizToUpdate.setPublic(quiz.isPublic());
-            saveQuiz(quizToUpdate);
-            return quizToUpdate;
-        }
-        else throw new Exception("Cannot modify a quiz if it has participants!");
+    public void editPublicStatus( long quizId){
+        Quiz quiz = quizRepository.findById(quizId).orElseThrow(()-> new ResourceNotFoundException("Quiz no found"));
+        quiz.setPublic(!quiz.isPublic());
+        saveQuiz(quiz);
     }
-
-    public void saveQuiz (Quiz quiz) {
-        quizRepository.save(quiz);
-    }
-
-    public List<Participant> getAllParticipantsByQuizId(long quizId) {
-        Quiz quiz = quizRepository.findById(quizId).orElseThrow(() ->
-                new ResourceNotFoundException("Quiz not found"));
-        return quiz.getParticipantList();
-    }
-
-    public void disableQuiz(long quizId) {
-        Quiz quiz = findQuizById(quizId);
+    public void editAvailableStatus( long quizId){
+        Quiz quiz = quizRepository.findById(quizId).orElseThrow(()-> new ResourceNotFoundException("Quiz no found"));
         quiz.setAvailable(!quiz.isAvailable());
-
+        saveQuiz(quiz);
     }
 
-    public List<Quiz> getAllQuizzes() {
+    public List<Quiz> getAllQuizzes ( ){
         return quizRepository.findAll();
+    }
+    public List<Quiz> getUserQuizzes ( long userID){
+        List<Quiz> userQuizzes = getAllQuizzes();
+        userQuizzes.removeIf(quiz -> quiz.getAuthor().getId()!=userID);
+        userQuizzes.removeIf(quiz -> quiz.isAvailable()== false);
+        return userQuizzes;
+    }
+    public Quiz getQuizById( long quizId){
+        return quizRepository.findById(quizId).orElseThrow(()-> new ResourceNotFoundException("Quiz no found"));
+    }
+
+    public List<Quiz> getAllQuizzesSorted ( String propriety){
+        return quizRepository.findAll(Sort.by(propriety));
+    }
+
+    public Page<Quiz> getAllQuizzesWithPagination (int offSet ,int pageSize ){
+//        List<Quiz> userQuizzes = getAllQuizzes();
+//        userQuizzes.removeIf(quiz -> quiz.isPublic()==false);
+//        Pageable pageable = PageRequest.of(offSet, pageSize);
+//        Page<Quiz> page = new PageImpl<>(userQuizzes, pageable, userQuizzes.size());
+
+       Page<Quiz> quizPage = quizRepository.findPublicQuizzes(PageRequest.of(offSet, pageSize));
+
+
+        return quizPage;
     }
 }

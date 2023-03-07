@@ -1,75 +1,66 @@
 package com.sda.controllers;
 
-import com.sda.model.quizzes.Question;
-import com.sda.model.quizzes.Quiz;
-import com.sda.services.AuthorService;
+import com.sda.models.Quiz;
 import com.sda.services.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/quiz")
 public class QuizController {
-//    @Autowired
-//    private AuthorService authorService;
     @Autowired
     private QuizService quizService;
 
-    @PostMapping("/add/{userId}") // Password protected
-    public ResponseEntity<Quiz> createQuizForAuthor(@PathVariable Long userId, @RequestBody Quiz quiz) {
-        System.out.println(quiz.isPublic());
-        // Create quiz entity
-        Quiz newQuiz = quizService.createQuizAndAddAuthor(quiz ,userId);  // Method assigns author to quiz
-        //Save the quiz entity
+    @PostMapping("/add/{id}")
+    public ResponseEntity<String> addQuiz (@PathVariable Long id, @RequestBody Quiz quiz){
+        Quiz newQuiz = quizService.createQuizAndAddAuthor(quiz,id);
         quizService.saveQuiz(newQuiz);
-        return new ResponseEntity<Quiz>(newQuiz, HttpStatus.CREATED);
+        return new ResponseEntity<>("added", HttpStatus.CREATED);
+    }
+    @PutMapping("/public/{id}")
+    public ResponseEntity<String> editPublicStatus (@PathVariable Long id){
+        quizService.editPublicStatus(id);
+        return new ResponseEntity<>("edited", HttpStatus.OK);
+    }
+    @PutMapping("/remove/{id}")
+    public ResponseEntity<String> editAvailableStatus (@PathVariable Long id){
+        quizService.editAvailableStatus(id);
+        return new ResponseEntity<>("edited", HttpStatus.OK);
+    }
+    @GetMapping("/user/{id}")
+    public ResponseEntity<List<Quiz>> getUserQuizzes (@PathVariable Long id){
+        List<Quiz> userQuizzes = quizService.getUserQuizzes(id);
+        return  new ResponseEntity<>(userQuizzes,HttpStatus.OK);
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<Quiz> getQuiz (@PathVariable Long id){
+        Quiz quiz = quizService.getQuizById(id);
+        return  new ResponseEntity<>(quiz,HttpStatus.OK);
     }
 
-    @PutMapping("/{id}/edit") // Password protected
-    public ResponseEntity<Quiz> editQuizById(@PathVariable long id, @RequestBody Quiz quiz) throws Exception {
-            Quiz updatedQuiz = quizService.editQuiz(id, quiz);
-            return new ResponseEntity<>(updatedQuiz, HttpStatus.OK);
+    @GetMapping("/all")
+    public ResponseEntity<List<Quiz>> getAllQuizzes (){
+        List<Quiz> Quizzes = quizService.getAllQuizzes();
+        Quizzes.removeIf(quiz -> quiz.isPublic()==false);
+        return  new ResponseEntity<>(Quizzes,HttpStatus.OK);
     }
 
-    @PutMapping("/{id}/remove") // Password protected
-    public ResponseEntity<String> removeQuizById(@PathVariable long id) {
-        quizService.disableQuiz(id);
-        return new ResponseEntity<String>("The quiz with ID " + id + " is removed", HttpStatus.NO_CONTENT);
+    @GetMapping("/sortedby/{proprety}")
+    public ResponseEntity<List<Quiz>> getAllQuizzesSorted(@PathVariable String proprety){
+        List<Quiz> Quizzes = quizService.getAllQuizzesSorted(proprety);
+        Quizzes.removeIf(quiz -> quiz.isPublic()==false);
+        return  new ResponseEntity<>(Quizzes,HttpStatus.OK);
+    }
+    @GetMapping("/pagination/{offSet}/{pageSize}")
+    public ResponseEntity<Page<Quiz>> getAllQuizzesWithPagination(@PathVariable int pageSize, @PathVariable int offSet){
+        Page<Quiz> quizPage = quizService.getAllQuizzesWithPagination(offSet,pageSize);
+        return  new ResponseEntity<>(quizPage,HttpStatus.OK);
     }
 
-    @GetMapping("/{id}") // Accessible to all
-    public ResponseEntity<Quiz> getQuizById(@PathVariable long id){
-        Quiz quiz = quizService.findQuizById(id);
-        //This is to shuffle the answers
-        List<Question> questionList= quiz.getQuestions();
-        for (Question q :questionList) {
-            Collections.shuffle(q.getAnswers());
-        }
-        return new ResponseEntity<>(quiz, HttpStatus.OK);
-    }
-
-    @GetMapping("/user/{userId}") // Password protected
-    public ResponseEntity<List<Quiz>> getAllUserQuizzes(@PathVariable long userId){
-        List<Quiz> quizzes = quizService.getAllQuizzes();
-        quizzes.removeIf(quiz -> quiz.getAuthor().getId()!= userId);
-        return new ResponseEntity<>(quizzes, HttpStatus.OK);
-    }
-
-    @GetMapping("/all-quizzes") // Should be accessible to all
-    public ResponseEntity<List<Quiz>> getAll(){
-        List<Quiz> quizzes = quizService.getAllQuizzes();
-        // Filter quizzes by availability
-        List<Quiz> availableQuizzes = new ArrayList<>();
-        for (Quiz q : quizzes) {
-            if (q.isAvailable()) availableQuizzes.add(q);
-        }
-        availableQuizzes.removeIf(quiz -> !quiz.isPublic());
-        return new ResponseEntity<>(availableQuizzes, HttpStatus.OK);
-    }
 
 }

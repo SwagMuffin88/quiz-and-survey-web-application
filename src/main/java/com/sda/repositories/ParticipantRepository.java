@@ -1,7 +1,7 @@
 package com.sda.repositories;
 
-import com.sda.model.users.Participant;
+import com.sda.models.Participant;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ParticipantRepository extends JpaRepository<Participant, Long> {
+public interface ParticipantRepository extends JpaRepository<Participant,Long> {
 }

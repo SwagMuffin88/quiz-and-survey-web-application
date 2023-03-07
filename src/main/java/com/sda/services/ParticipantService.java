@@ -1,34 +1,33 @@
 package com.sda.services;
 
-import com.sda.exceptions.ResourceNotFoundException;
-import com.sda.model.quizzes.Quiz;
-import com.sda.model.users.Participant;
-import com.sda.repositories.AuthorRepository;
+import com.sda.exception.ResourceNotFoundException;
+import com.sda.models.Participant;
+import com.sda.models.Quiz;
 import com.sda.repositories.ParticipantRepository;
 import com.sda.repositories.QuizRepository;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
-@Service @RequiredArgsConstructor @Transactional
+@Service
 public class ParticipantService {
-    private final QuizRepository quizRepository;
-    private final ParticipantRepository participantRepository;
-    private final QuizService quizService;
+    @Autowired
+    private QuizRepository quizRepository;
+    @Autowired
+    private ParticipantRepository participantRepository;
 
-    public Participant createParticipant(Participant participant) {
+
+    public Quiz addParticipantToQuiz (Participant participant, long id){
+        Quiz quiz= quizRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Quiz not found"));
+        Participant participant1 = saveParticipant(participant);
+        List<Participant> participantList =quiz.getParticipantList();
+        participantList.add(participant1);
+        quiz.setParticipantList(participantList);
+        return quizRepository.save(quiz);
+    }
+
+    Participant saveParticipant (Participant participant){
         return participantRepository.save(participant);
     }
-
-    public Participant addParticipantToQuiz(long quizId, Participant participant) {
-        Quiz quiz = quizRepository.findById(quizId).orElseThrow(() ->
-                new ResourceNotFoundException("Quiz not found"));
-        Participant newParticipant = createParticipant(participant);
-        quiz.getParticipantList().add(newParticipant);
-        quizService.saveQuiz(quiz);
-        return newParticipant;
-    }
-
 }
