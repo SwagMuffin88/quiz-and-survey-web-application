@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class Controller {
+public class ControllerForTesting {
+    // This is a test controller
     @Autowired
     private AuthorService authorService;
 
