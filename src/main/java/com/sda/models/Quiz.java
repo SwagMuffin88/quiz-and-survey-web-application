@@ -40,5 +40,5 @@ public class Quiz {
     private boolean available;
 
     @Column(columnDefinition="tinyint(1) default 1")
-    private boolean Public;
+    private boolean publicized;
 }

@@ -40,7 +40,7 @@ public class QuizService {
         newQuiz.setDescription(quiz.getDescription());
         newQuiz.setCategory(quiz.getCategory());
         newQuiz.setTitle(quiz.getTitle());
-        newQuiz.setPublic(quiz.isPublic());
+        newQuiz.setPublicized(quiz.isPublicized());
         newQuiz.setTags(quiz.getTags());
         return newQuiz;
     }
@@ -49,7 +49,7 @@ public class QuizService {
     }
     public void editPublicStatus( long quizId){
         Quiz quiz = quizRepository.findById(quizId).orElseThrow(()-> new ResourceNotFoundException("Quiz no found"));
-        quiz.setPublic(!quiz.isPublic());
+        quiz.setPublicized(!quiz.isPublicized());
         saveQuiz(quiz);
     }
     public void editAvailableStatus( long quizId){
