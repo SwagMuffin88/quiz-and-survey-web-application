@@ -39,8 +39,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                     auth.requestMatchers("/**", "/auth/**", "/quiz/**")
                             .permitAll()
-                            .anyRequest()
-                            .authenticated()
                     )
                 .build();
 

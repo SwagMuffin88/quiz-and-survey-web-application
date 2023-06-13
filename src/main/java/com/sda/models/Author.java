@@ -39,6 +39,7 @@ public class Author {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
 
+    @Column(columnDefinition="tinyint(1) default 1")
     private boolean available;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

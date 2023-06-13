@@ -22,6 +22,11 @@ public class QuestionService {
     @Autowired
     private AnswerRepository answerRepository;
 
+    public Question findQuestionById(long id) {
+        return questionRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Question not found"));
+    }
+
     public Question createQuestion (Question q){
         Question newQuestion = new Question();
         newQuestion.setStatement(q.getStatement());
@@ -43,10 +48,33 @@ public class QuestionService {
         quiz.getQuestions().add(createQuestion(question));
         return quizRepository.save(quiz);
     }
-    public Question editAvailableStatus (long id){
-        Question question = questionRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Quiz not found"));
-        question.setAvailable(!question.isAvailable());
-        return questionRepository.save(question);
+
+    public Question editQuestion(long id, Question question) {
+        Question questionToUpdate = findQuestionById(id);
+
+        questionToUpdate.setStatement(question.getStatement());
+        questionToUpdate.setAnswers(question.getAnswers());
+        for (Answer a : questionToUpdate.getAnswers()) {
+            a.setAvailable(true);
+            answerRepository.saveAndFlush(a);
+        }
+        questionToUpdate.setCorrectAnswer(questionToUpdate.getAnswers().get(0));
+
+        saveQuestion(questionToUpdate);
+        return questionToUpdate;
     }
 
+    private void saveQuestion(Question question) {
+        questionRepository.save(question);
+    }
+
+    public void disableQuestion(long questionId) {
+        Question question = findQuestionById(questionId);
+        question.setAvailable(!question.isAvailable());
+        for (Answer a : question.getAnswers()) {
+            a.setAvailable(false);
+            answerRepository.saveAndFlush(a);
+        }
+        saveQuestion(question);
+    }
 }

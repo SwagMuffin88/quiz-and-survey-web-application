@@ -16,11 +16,10 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    public String authenticate (AuthenticationRequest request){
+    public void authenticate (AuthenticationRequest request){
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 request.getUsername(),request.getUsername()
         ));
-        return "done";
     }
 
 

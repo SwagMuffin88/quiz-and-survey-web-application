@@ -1,5 +1,6 @@
 package com.sda.controllers.authentication;
 
+import com.sda.controllers.DTO.AuthorDTO;
 import com.sda.exception.ResourceNotFoundException;
 import com.sda.models.Author;
 import com.sda.services.AuthorService;
@@ -25,9 +26,12 @@ public class AuthenticationController {
     private AuthenticationManager authenticationManager;
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerAuthor(@Valid @RequestBody Author author){
+    public ResponseEntity<AuthorDTO> registerAuthor(@Valid @RequestBody Author author){
+        author.setAvailable(true);
         authorService.addAuthor(author);
-        return new ResponseEntity<String>("added", HttpStatus.CREATED);
+         AuthorDTO authorDTO = new AuthorDTO(author.getId(), author.getFirstName(), author.getLastName(),
+                 author.getUsername(), author.getEmail(), author.getDateOfBirth(), author.isAvailable());
+        return new ResponseEntity<>(authorDTO, HttpStatus.CREATED);
     }
 
     @PostMapping("/login")

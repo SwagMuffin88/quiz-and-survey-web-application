@@ -17,5 +17,6 @@ public class AuthorDTO {
     private String username;
     private String email;
     private LocalDate dateOfBirth;
+    private boolean available;
 
 }
