@@ -24,12 +24,14 @@ public class AuthorService {
     }
 
     public AuthenticationResponse getAuthenticationResponse(String username) {
-        Author author = authorRepository.findByUsername(username).orElseThrow(()-> new ResourceNotFoundException("Quiz no found"));
+        Author author = authorRepository.findByUsername(username).orElseThrow(
+                ()-> new ResourceNotFoundException("Quiz no found"));
         return new AuthenticationResponse(author.getId(),author.getUsername());
     }
 
     public AuthorDTO getAuthorInfo (long id){
-        Author author = authorRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Quiz no found"));
+        Author author = authorRepository.findById(id).orElseThrow(
+                ()-> new ResourceNotFoundException("Quiz no found"));
         return new AuthorDTO(author.getId(),author.getFirstName(),author.getLastName(),author.getUsername(),author.getEmail(),author.getDateOfBirth());
 
     }

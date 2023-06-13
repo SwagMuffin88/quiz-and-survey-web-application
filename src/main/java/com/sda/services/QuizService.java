@@ -83,7 +83,6 @@ public class QuizService {
 
        Page<Quiz> quizPage = quizRepository.findPublicQuizzes(PageRequest.of(offSet, pageSize));
 
-
         return quizPage;
     }
 }
