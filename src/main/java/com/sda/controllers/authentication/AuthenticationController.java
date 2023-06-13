@@ -3,7 +3,7 @@ package com.sda.controllers.authentication;
 import com.sda.exception.ResourceNotFoundException;
 import com.sda.models.Author;
 import com.sda.services.AuthorService;
-import jakarta.validation.Valid;
+import jakarta.validation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +12,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+
 
 @RestController
 @RequestMapping("/auth")

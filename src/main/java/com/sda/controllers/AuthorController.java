@@ -18,6 +18,6 @@ public class AuthorController {
     @GetMapping("/{id}")
     public ResponseEntity<AuthorDTO> getUserInfo(@PathVariable long id){
         AuthorDTO authorDTO = authorService.getAuthorInfo(id);
-        return  new ResponseEntity<>(authorDTO, HttpStatus.OK);
+        return new ResponseEntity<>(authorDTO, HttpStatus.OK);
     }
 }

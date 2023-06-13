@@ -46,14 +46,14 @@ public class QuizController {
     @GetMapping("/all")
     public ResponseEntity<List<Quiz>> getAllQuizzes (){
         List<Quiz> Quizzes = quizService.getAllQuizzes();
-        Quizzes.removeIf(quiz -> quiz.isPublic()==false);
+        Quizzes.removeIf(quiz -> quiz.isPublicized()==false);
         return  new ResponseEntity<>(Quizzes,HttpStatus.OK);
     }
 
     @GetMapping("/sortedby/{proprety}")
     public ResponseEntity<List<Quiz>> getAllQuizzesSorted(@PathVariable String proprety){
         List<Quiz> Quizzes = quizService.getAllQuizzesSorted(proprety);
-        Quizzes.removeIf(quiz -> quiz.isPublic()==false);
+        Quizzes.removeIf(quiz -> quiz.isPublicized()==false);
         return  new ResponseEntity<>(Quizzes,HttpStatus.OK);
     }
     @GetMapping("/pagination/{offSet}/{pageSize}")

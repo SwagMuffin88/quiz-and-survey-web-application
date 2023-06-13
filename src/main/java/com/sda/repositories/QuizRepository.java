@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface QuizRepository extends JpaRepository<Quiz,Long> {
 
-    @Query("SELECT q FROM Quiz q WHERE q.Public = true")
+    @Query("SELECT q FROM Quiz q WHERE q.publicized = true")
     Page<Quiz> findPublicQuizzes(Pageable pageable);
 
 }

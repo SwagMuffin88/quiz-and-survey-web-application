@@ -17,10 +17,10 @@ public class AuthorService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public String addAuthor (Author author){
+    public void addAuthor (Author author){
         author.setPassword(passwordEncoder.encode(author.getPassword()));
         authorRepository.save(author);
-        return "added to DB";
+//        return "added to DB";
     }
 
     public AuthenticationResponse getAuthenticationResponse(String username) {
