@@ -31,14 +31,14 @@ public class QuestionService {
         Question newQuestion = new Question();
         newQuestion.setStatement(q.getStatement());
         newQuestion.setAvailable(true);
-        newQuestion.setCorrectAnswer(q.getCorrectAnswer());
-        answerRepository.save(q.getCorrectAnswer());
-        List<Answer> answers = new ArrayList<>();
+        List<Answer> answers = new ArrayList<>(); // Correct answer availability might not be defined as true
         for (Answer a : q.getAnswers() ) {
             a.setAvailable(true);
             answerRepository.save(a);
             answers.add(a);
         }
+        newQuestion.setCorrectAnswer(q.getCorrectAnswer());
+        answerRepository.save(q.getCorrectAnswer());
         newQuestion.setAnswers(answers);
         return questionRepository.save(newQuestion);
     }

@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -41,6 +42,12 @@ public class Author {
 
     @Column(columnDefinition="tinyint(1) default 1")
     private boolean available;
+
+    // !
+    // Instead of One author for One quiz, the association should be One author with a list of multiple quizzes
+    // But this also means some current service methods need to be changed
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Quiz> quizzes;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles",

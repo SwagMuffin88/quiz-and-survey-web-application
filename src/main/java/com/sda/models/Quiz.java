@@ -33,8 +33,12 @@ public class Quiz {
     @OneToMany (cascade = CascadeType.ALL)
     private List<Participant> participantList;
 
+    // !
     @OneToOne(cascade = CascadeType.MERGE)
-    private Author author;
+    private Author author; // Might be the reason we cannot add multiple quizzes to single user
+    // Throws an SQLException of duplicate ID
+    // Older version of code used OneToMany association in Author class and no association in Quiz class,
+    //  why the change?
 
     @Column(columnDefinition="tinyint(1) default 1")
     private boolean available;

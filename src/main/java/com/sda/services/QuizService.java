@@ -47,13 +47,13 @@ public class QuizService {
     public Quiz saveQuiz (Quiz quiz) {
         return quizRepository.save(quiz);
     }
-    public void editPublicStatus( long quizId){
-        Quiz quiz = quizRepository.findById(quizId).orElseThrow(()-> new ResourceNotFoundException("Quiz no found"));
+    public void editPublicStatus(long quizId){
+        Quiz quiz = quizRepository.findById(quizId).orElseThrow(()-> new ResourceNotFoundException("Quiz not found"));
         quiz.setPublicized(!quiz.isPublicized());
         saveQuiz(quiz);
     }
     public void editAvailableStatus( long quizId){
-        Quiz quiz = quizRepository.findById(quizId).orElseThrow(()-> new ResourceNotFoundException("Quiz no found"));
+        Quiz quiz = quizRepository.findById(quizId).orElseThrow(()-> new ResourceNotFoundException("Quiz not found"));
         quiz.setAvailable(!quiz.isAvailable());
         saveQuiz(quiz);
     }
@@ -64,15 +64,15 @@ public class QuizService {
     public List<Quiz> getUserQuizzes ( long userID){
         List<Quiz> userQuizzes = getAllQuizzes();
         userQuizzes.removeIf(quiz -> quiz.getAuthor().getId()!=userID);
-        userQuizzes.removeIf(quiz -> quiz.isAvailable()== false);
+        userQuizzes.removeIf(quiz -> !quiz.isAvailable());
         return userQuizzes;
     }
     public Quiz getQuizById( long quizId){
-        return quizRepository.findById(quizId).orElseThrow(()-> new ResourceNotFoundException("Quiz no found"));
+        return quizRepository.findById(quizId).orElseThrow(()-> new ResourceNotFoundException("Quiz not found"));
     }
 
-    public List<Quiz> getAllQuizzesSorted ( String propriety){
-        return quizRepository.findAll(Sort.by(propriety));
+    public List<Quiz> getAllQuizzesSorted (String property){
+        return quizRepository.findAll(Sort.by(property));
     }
 
     public Page<Quiz> getAllQuizzesWithPagination (int offSet ,int pageSize ){
